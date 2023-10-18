@@ -1,0 +1,53 @@
++<main>
+   <div class="row">
+      <div class="col-md-5">
+         <br>
+         <h2>Create an Event</h2>
+         <form method="POST" id="createevent-form" action="/create-event">
+         <div class="row mb-2">
+         <label for="firstName" class="col-sm-2 col-form-label">First Name : </label>
+         <div class="col-sm-6">
+            <input type="text" class="input" id="firstName" name="firstName" placeholder="Enter your first name">
+         </div>
+         <div id="no-first-name" class="div-text" hidden>Please enter your first name</div>
+      </div>
+
+      <div class="row mb-2">
+         <label for="lastName" class="col-sm-2 col-form-label">Last Name : </label>
+         <div class="col-sm-6">
+            <input type="text" class="input" id="lastName" name="lastName" placeholder="Enter your last name">
+         </div>
+         <div id="no-last-name" class="div-text" hidden>Please enter your last name</div>
+      </div>
+
+      <div class="row mb-2">
+         <label for="title" class="col-sm-2 col-form-label">Title of Event : </label>
+         <div class="col-sm-6">
+            <input type="text" size = "25" class="input" id="title" name="title" placeholder="Enter the title of the event">
+         </div>
+         <div id="no-title" class="div-text"  hidden>Please enter the title of the Event</div>
+      </div>
+
+      <div class="row mb-2">
+         <label for="description" class="col-sm-2 col-form-label">Description of Event : </label>
+         <div class="col-sm-6">
+            <input type="text" size = "50" class="input" id="description" name="description" placeholder="Enter a description of the event">
+         </div>
+         <div id="no-description" class="div-text"  hidden>Please enter a description of the Event</div>
+      </div>
+
+       <div class="row mb-2">
+         <label for="date" class="col-sm-2 col-form-label">Date of Event : </label>
+         <div class="col-sm-6">
+            <input type="date" class="input" id="date" name="date" placeholder="MM/DD/YYYY">
+         </div>
+         <div id="no-date" class="div-text" hidden>Please enter the date of the Event</div>
+      </div>
+
+      <br>
+      <input type="submit" class="btnq" value="Post the Event">
+   </form>
+   <br>
+      </div>
+</div>
+</main>
