@@ -1,0 +1,47 @@
+<main>
+   <div class="row">
+      <div class="col-md-5">
+         <br>
+         <h2 style = 'margin-left:100px;'>Let's create your account!</h2>
+         <form method="POST" id="signup-form" action="/sign-up">
+         <div class="row mb-2">
+         <label for="firstName" class="col-sm-2 col-form-label">First Name: </label>
+         <div class="col-sm-6">
+            <input type="text" class="input" id="firstName" name="firstName" placeholder="Enter a valid first name">
+         </div>
+         <div id="no-first-name" class="div-text" hidden>Please enter your first name</div>
+      </div>
+      <div class="row mb-2">
+         <label for="lastName" class="col-sm-2 col-form-label">Last Name:</label>
+         <div class="col-sm-6">
+            <input type="text" class="input" id="lastName" name="lastName" placeholder="Enter a valid last name">
+         </div>
+         <div id="no-last-name" class="div-text" hidden>Please enter your last name</div>
+      </div>
+      <div class="row mb-2">
+         <label for="emailIdInput" class="col-sm-2 col-form-label">Email:</label>
+         <div class="col-sm-6">
+            <input type="email" class="input" id="emailIdInput" name="emailIdInput" placeholder="Enter a valid email id">
+         </div>
+         <div id="no-email" class="div-text"  hidden>Please enter your email</div>
+      </div>
+      <br>
+      <div class="row mb-2">
+         <label for="passwordInput" class="col-sm-2 col-form-label">Password:</label>
+         <div class="col-sm-6">
+            <input type="password" class="input" id="passwordInput" name="passwordInput" placeholder="Enter a valid password">
+         </div>
+         <div id="no-password" class="div-text" hidden>Please enter your password </div>
+      </div>
+      <br>
+      <br>
+      <input type="submit" class="btnq" value="Sign-Up">
+   </form>
+   <br>
+      <a style = 'margin-left:100px;' href="/sign-in">Already have an account? Click here to Sign In!</a>
+      </div>
+</div>
+</main>
+<script src="/public/signup.js"></script>
+
+
