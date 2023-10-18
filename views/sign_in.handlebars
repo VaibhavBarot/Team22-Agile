@@ -1,20 +1,64 @@
 <main>
+   <style>
+      body,
+      html {
+         margin: 0;
+         padding: 0;
+         height: 100%;
+      }
+
+      .col-md-5 {
+         text-align: left;
+         background-color: transparent;
+         padding: 20px;
+         border-radius: 0;
+      }
+
+      h2 {
+         margin-left: 0;
+      }
+
+      .form-control {
+         width: 100%;
+      }
+
+      .col-sm-2 {
+         text-align: left;
+      }
+
+      .btnq {
+         background-color: rgb(4, 75, 23);
+         color: white;
+         padding: 10px 20px;
+         border: none;
+         cursor: pointer;
+         display: block;
+         margin: 20px auto 0;
+      }
+
+      a {
+         text-align: left;
+         margin-top: 10px;
+      }
+   </style>
    <div class="centre">
       <div class="col-md-5">
          <br>
-         <h2 style = 'margin-left:100px;'>Sign-in</h2>
+         <h2>Sign-in</h2>
          <form method="POST" id="signin-form" action="/sign-in">
             <div class="row mb-3">
                <label for="emailIdInput" class="col-sm-2 col-form-label">Email:</label>
                <div class="col-sm-6">
-                  <input type="email" class="form-control" id="emailIdInput" name="emailIdInput" placeholder="Enter a valid email id">
+                  <input type="email" class="form-control" id="emailIdInput" name="emailIdInput"
+                     placeholder="Enter a valid email id">
                </div>
                <div id="no-email" hidden>Please enter your email</div>
             </div>
             <div class="row mb-3">
                <label for="passwordInput" class="col-sm-2 col-form-label">Password:</label>
                <div class="col-sm-6">
-                  <input type="password" class="form-control" id="passwordInput" name="passwordInput" placeholder="Enter a valid password">
+                  <input type="password" class="form-control" id="passwordInput" name="passwordInput"
+                     placeholder="Enter a valid password">
                </div>
                <div id="no-password" hidden>Please enter your password</div>
             </div>
@@ -22,7 +66,7 @@
             <button type="submit" class="btnq">Sign in</button>
          </form>
          <br>
-         <a style = 'margin-left:100px;' href="/sign-up">Click here to Register!</a>
+         <a href="/sign-up">Click here to Register!</a>
       </div>
    </div>
 </main>
