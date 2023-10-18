@@ -1,0 +1,28 @@
+<main>
+   <div class="centre">
+      <div class="col-md-5">
+         <br>
+         <h2 style = 'margin-left:100px;'>Sign-in</h2>
+         <form method="POST" id="signin-form" action="/sign-in">
+            <div class="row mb-3">
+               <label for="emailIdInput" class="col-sm-2 col-form-label">Email:</label>
+               <div class="col-sm-6">
+                  <input type="email" class="form-control" id="emailIdInput" name="emailIdInput" placeholder="Enter a valid email id">
+               </div>
+               <div id="no-email" hidden>Please enter your email</div>
+            </div>
+            <div class="row mb-3">
+               <label for="passwordInput" class="col-sm-2 col-form-label">Password:</label>
+               <div class="col-sm-6">
+                  <input type="password" class="form-control" id="passwordInput" name="passwordInput" placeholder="Enter a valid password">
+               </div>
+               <div id="no-password" hidden>Please enter your password</div>
+            </div>
+            <br>
+            <button type="submit" class="btnq">Sign in</button>
+         </form>
+         <br>
+         <a style = 'margin-left:100px;' href="/sign-up">Click here to Register!</a>
+      </div>
+   </div>
+</main>
