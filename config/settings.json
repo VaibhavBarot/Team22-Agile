@@ -1,6 +1,6 @@
 {
   "mongoConfig": {
-    "serverUrl": "mongodb+srv://learnlocally:<password>@learnlocally.ywir5au.mongodb.net/?retryWrites=true&w=majority",
+    "serverUrl": "mongodb+srv://learnlocally:oaLsJ6aU6Ozbm6My@learnlocally.ywir5au.mongodb.net/?retryWrites=true&w=majority",
     "database": "Learnlocally"
   }
   }
