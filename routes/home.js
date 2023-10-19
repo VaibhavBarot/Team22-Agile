@@ -70,11 +70,12 @@ router.route('/sign-out')
 .post(async (req, res) => {
     try {
         let date = xss(req.body.date);
-        let firstName = xss(req.body.firstName);
-        let lastName = xss(req.body.lastName);
+        let name = xss(req.body.name);
+        let time = xss(req.body.time)
+        let venue = xss(req.body.venue)
         let description = xss(req.body.description)
-        let title = xss(req.body.title)
-        await index.events.createEvent(date, firstName, lastName,  title, description);
+        let host = xss(req.body.host)
+        await index.events.createEvent(name, date, time, venue, host, description);
         res.redirect('/create-event');
     }catch(e) {
        console.log(e)

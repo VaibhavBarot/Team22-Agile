@@ -3,20 +3,21 @@ const mongoCollections = require('../config/mongocollections');
 const events = mongoCollections.events
 
 
-const createEvent = async (date, firstName, lastName, title, description) => {
+const createEvent = async (name, date, time, venue, host, description) => {
 
-    lastName = lastName.trim();
-    firstName = firstName.trim();
+    name = name.trim();
+    venue = venue.trim()
+    host = host.trim()
     description = description.trim()
-    title = title.trim()
 
     const eventCollection = await events();
 
     let newEvent ={
-      firstName:firstName,
-      lastName:lastName,
+      name:name,
       date:date,
-      title:title,
+      time:time,
+      venue:venue,
+      host:host,
       description:description
     }
 
