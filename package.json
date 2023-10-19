@@ -3,15 +3,18 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "jasmine"
   },
   "dependencies": {
-    "express": "^4.18.2",
+    "axios": "^1.5.1",
     "mongodb": "^6.1.0",
     "bcrypt": "^5.1.0",
     "bcryptjs": "^2.4.3",
+    "express": "^4.18.2",
     "express-handlebars": "^6.0.6",
     "express-session": "^1.17.3",
+    "jasmine": "^5.1.0",
     "xss": "^1.0.14"
   }
 
