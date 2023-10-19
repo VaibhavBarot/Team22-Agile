@@ -24,7 +24,7 @@ router.route('/sign-in')
 
         emailId = emailId.trim().toLowerCase();
         password = password.trim();
-        
+
         let user = await index.users.login(emailId, password);
         req.session.user = {emailId: emailId, firstName:user.firstName, lastName:user.lastName};
         res.redirect('/');
@@ -61,6 +61,27 @@ router.route('/sign-out')
     res.clearCookie('AuthSession');
     res.redirect('/sign-in'); 
 })
+
++router.route('/create-event')
+.get(async (req, res) => {
+        return res.render('./create_event', {title: "LearnLocally",head:"LearnLocally"});
+    }
+)
+.post(async (req, res) => {
+    try {
+        let date = xss(req.body.date);
+        let name = xss(req.body.name);
+        let time = xss(req.body.time)
+        let venue = xss(req.body.venue)
+        let description = xss(req.body.description)
+        let host = xss(req.body.host)
+        await index.events.createEvent(name, date, time, venue, host, description);
+        res.redirect('/create-event');
+    }catch(e) {
+       console.log(e)
+    }
+})
+
 
 
 module.exports = router;
