@@ -1,47 +1,129 @@
 <main>
+   <style>
+      body,
+      html {
+         margin: 0;
+         padding: 0;
+         height: 100%;
+      }
+
+      .col-md-5 {
+         text-align: left;
+         background-color: transparent;
+         padding: 30px;
+         border-radius: 0;
+      }
+
+      h2 {
+         margin-left: 0;
+      }
+
+      .form-control {
+         width: 100%;
+      }
+
+      .col-sm-2 {
+         text-align: left;
+         font-weight: bold;
+         background-color: transparent;
+         padding: 10px 20px;
+
+      }
+
+.btnq{
+    
+  align-items: center;
+  appearance: none;
+  background-image: radial-gradient(100% 100% at 100% 0, #237845 0, #116638 100%);
+  border: 0;
+  border-radius: 6px;
+  box-shadow: rgba(45, 35, 66, .4) 0 2px 4px,rgba(45, 35, 66, .3) 0 7px 13px -3px,rgba(58, 65, 111, .5) 0 -3px 0 inset;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: "JetBrains Mono",monospace;
+  height: 48px;
+  justify-content: center;
+  line-height: 1;
+  list-style: none;
+  overflow: hidden;
+  padding-left: 16px;
+  padding-right: 16px;
+  position: relative;
+  text-align: left;
+  text-decoration: none;
+  transition: box-shadow .15s,transform .15s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  will-change: box-shadow,transform;
+  font-size: 18px;
+}
+
+.btnq:focus {
+  box-shadow: #3c4fe0 0 0 0 1.5px inset, rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
+}
+
+.btnq:hover {
+  box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
+  transform: translateY(-2px);
+}
+
+.btnq:active {
+  box-shadow: #3c4fe0 0 3px 7px inset;
+  transform: translateY(2px);
+}
+
+      a {
+         text-align: left;
+         margin-top: 10px;
+      }
+   </style>
    <div class="row">
       <div class="col-md-5">
          <br>
-         <h2 style = 'margin-left:100px;'>Let's create your account!</h2>
          <form method="POST" id="signup-form" action="/sign-up">
-         <div class="row mb-2">
-         <label for="firstName" class="col-sm-2 col-form-label">First Name: </label>
-         <div class="col-sm-6">
-            <input type="text" class="input" id="firstName" name="firstName" placeholder="Enter a valid first name">
-         </div>
-         <div id="no-first-name" class="div-text" hidden>Please enter your first name</div>
+            <div class="row mb-2">
+               <label for="firstName" class="col-sm-2 col-form-label">First Name: </label>
+               <div class="col-sm-6">
+                  <input type="text" class="input" id="firstName" name="firstName"
+                     placeholder="Enter a valid first name">
+               </div>
+               <div id="no-first-name" class="div-text" hidden>Please enter your first name</div>
+            </div>
+            <div class="row mb-2">
+               <label for="lastName" class="col-sm-2 col-form-label">Last Name:</label>
+               <div class="col-sm-6">
+                  <input type="text" class="input" id="lastName" name="lastName" placeholder="Enter a valid last name">
+               </div>
+               <div id="no-last-name" class="div-text" hidden>Please enter your last name</div>
+            </div>
+            <div class="row mb-2">
+               <label for="emailIdInput" class="col-sm-2 col-form-label">Email:</label>
+               <div class="col-sm-6">
+                  <input type="email" class="input" id="emailIdInput" name="emailIdInput"
+                     placeholder="Enter a valid email id">
+               </div>
+               <div id="no-email" class="div-text" hidden>Please enter your email</div>
+            </div>
+            <br>
+            <div class="row mb-2">
+               <label for="passwordInput" class="col-sm-2 col-form-label">Password:</label>
+               <div class="col-sm-6">
+                  <input type="password" class="input" id="passwordInput" name="passwordInput"
+                     placeholder="Enter a valid password">
+               </div>
+               <div id="no-password" class="div-text" hidden>Please enter your password </div>
+            </div>
+            <br>
+            <br>
+            <input type="submit" class="btnq" value="Sign-Up">
+         </form>
+         <br>
+         <a style='margin-left:100px;' href="/sign-in">Already have an account? Click here to Sign In!</a>
       </div>
-      <div class="row mb-2">
-         <label for="lastName" class="col-sm-2 col-form-label">Last Name:</label>
-         <div class="col-sm-6">
-            <input type="text" class="input" id="lastName" name="lastName" placeholder="Enter a valid last name">
-         </div>
-         <div id="no-last-name" class="div-text" hidden>Please enter your last name</div>
-      </div>
-      <div class="row mb-2">
-         <label for="emailIdInput" class="col-sm-2 col-form-label">Email:</label>
-         <div class="col-sm-6">
-            <input type="email" class="input" id="emailIdInput" name="emailIdInput" placeholder="Enter a valid email id">
-         </div>
-         <div id="no-email" class="div-text"  hidden>Please enter your email</div>
-      </div>
-      <br>
-      <div class="row mb-2">
-         <label for="passwordInput" class="col-sm-2 col-form-label">Password:</label>
-         <div class="col-sm-6">
-            <input type="password" class="input" id="passwordInput" name="passwordInput" placeholder="Enter a valid password">
-         </div>
-         <div id="no-password" class="div-text" hidden>Please enter your password </div>
-      </div>
-      <br>
-      <br>
-      <input type="submit" class="btnq" value="Sign-Up">
-   </form>
-   <br>
-      <a style = 'margin-left:100px;' href="/sign-in">Already have an account? Click here to Sign In!</a>
-      </div>
-</div>
+   </div>
 </main>
 <script src="/public/signup.js"></script>
-
-
