@@ -19,7 +19,19 @@ accessing valuable insights, and connecting with like-minded individuals.
 
 3. **Connect and Learn**: Connect with fellow community members who share your passions. Initiate conversations, schedule learning sessions, and choose whether you'd like to learn or teach, either online or in person. It's a flexible and interactive way to expand your horizons."
 
+**Software Requirements**=>
 
+VSCode or Visual Studio Code
+MongoDb community edition
+NodeJS
+
+**How to Start project**=>
+
+Clone project to local repository in terminal run these commands
+
+"npm i" Install all dependencies
+"npm test" Run test cases using jasmine
+"npm start" Run the app
 
 
 
