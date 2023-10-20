@@ -37,12 +37,14 @@ Clone project to local repository in terminal run these commands
 
 ### Members of the Team:
 1. Vaibhav Sunil Barot
-2. Pavan Rohith Midimilla
-3. Shashank Ramesh Kumar
+2. Neelakshi Rashinkar
+3. Sejad Kiyam
 4. Pranav Muralidhar Rao
-5. Neelakshi Rashinkar
+5. Shashank Ramesh Kumar
 6. Sai Teja Nageshwar Sunki
-7. Sejad Kiyam
+7. Pavan Rohith Midimilla
+
+
 
 
 
