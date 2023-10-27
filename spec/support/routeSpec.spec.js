@@ -3,6 +3,7 @@ const axios= require('axios').default;
 const root = 'http://localhost:3000/';
 
 describe('Test endpoints', () => {
+    let testUserEmail;
     it('should return HTTP 200', async () => {
       const res = await axios
         .get(root)
@@ -21,8 +22,9 @@ describe('Test endpoints', () => {
       });
 
       it('should create a new user account', async () => {
+        testUserEmail = 'test@' + Math.random() + '.com'
         const res = await axios.post(root + 'sign-up',{
-            emailIdInput:'test@' + Math.random() + '.com',
+            emailIdInput:testUserEmail,
             passwordInput:'test@123',
             firstName:'Test',
             lastName:'Test'
@@ -32,8 +34,8 @@ describe('Test endpoints', () => {
 
       it('should sign into an account', async () => {
         const res = await axios.post(root + 'sign-in', {
-            emailIdInput:'vb@vb.com',
-            passwordInput:'vb'
+            emailIdInput:testUserEmail,
+            passwordInput:'test@123'
         })
         expect(res.status).toBe(200);
       })
