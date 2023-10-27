@@ -20,7 +20,10 @@ pipeline {
     
     stage('Test') {
       steps {
+        sh 'npm i -g forever'
+        sh 'forever start app.js'
         sh 'npm test'
+        sh 'npm uninstall -g forever'
       }
     }
     
