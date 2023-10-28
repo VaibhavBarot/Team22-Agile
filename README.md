@@ -33,9 +33,10 @@ Clone project to local repository in terminal run these commands
 
 "npm i" Install all dependencies
 
+"npm start" Run the app
+
 "npm test" Run test cases using jasmine
 
-"npm start" Run the app
 
 
 ### Members of the Team:
