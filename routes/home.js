@@ -3,6 +3,13 @@ const router = express.Router();
 const index = require('../data/index');
 const xss = require('xss');
 
+router.use(async(req,res,next) => {
+    if(req.session.user){
+        res.locals.isLoggedIn = true
+    }
+    next();
+})
+
 router.route('/')
 .get(async (req,res)=>{
     if (!req.session.user) {
