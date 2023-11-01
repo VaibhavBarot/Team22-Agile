@@ -25,4 +25,20 @@ router
 
 })
 
+router
+.route('/:id')
+.get(async(req,res)=>{
+    try {
+        if (!req.session.user) {
+            return res.redirect('/sign-in');
+        }
+        else {
+            let details = await index.events.getEventbyId(req.params.id);
+            return res.render('event_details',{title:'LearnLocally', head:'LearnLocally',name:details.name, date:details.date, time:details.time, venue: details.venue, host: details.host, description: details.description});
+        }
+    } catch (e) {
+        return res.status(404).render('errorPage',{error:e});
+    }
+})
+
 module.exports = router
