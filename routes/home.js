@@ -83,16 +83,40 @@ router.route('/create-event')
       try {
           let date = xss(req.body.date);
           let name = xss(req.body.name);
+          let email = xss(req.body.emailIdInput)
           let time = xss(req.body.time)
           let venue = xss(req.body.venue)
           let description = xss(req.body.description)
           let host = xss(req.body.host)
-          await index.events.createEvent(name, date, time, venue, host, description);
+          await index.events.createEvent(name, email, date, time, venue, host, description);
           res.redirect('/create-event');
       }catch(e) {
          console.log(e)
       }
   })
+
+  router
+.route('/allevents/request-event')
+.get(async (req, res) => {
+  if(req.session.user){
+      return res.render('request_event',{title:'LearnLocally', head:'LearnLocally'});
+  }else{
+      return res.redirect('/sign-in');
+  }
+   
+})
+
+.post(async (req, res) => {
+  try {
+      let emailId = xss(req.body.emailIdInput);
+      let description = xss(req.body.description)
+      await index.events.requestEvent(emailId, description);
+      res.redirect('/allevents/request-event');
+  }catch(e) {
+     console.log(e)
+  }
+})
+
 
 
 module.exports = router;

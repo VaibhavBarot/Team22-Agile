@@ -40,5 +40,16 @@ router
         return res.status(404).render('errorPage',{error:e});
     }
 })
+.post(async (req, res) => {
+    try {
+        
+        let id = xss(req.params.id);
+        await index.events.registerForEvent(id);
+        res.redirect('/allevents/'+id);
+    }catch(e) {
+       console.log(e)
+    }
+  })
+  
 
 module.exports = router
