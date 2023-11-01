@@ -1,0 +1,28 @@
+const express = require('express');
+const router = express.Router();
+const eventData = require('../data/events');
+const index = require('../data/index');
+const xss = require('xss');
+
+router
+.route('/')
+.get(async (req, res) => {
+    try {
+        if (!req.session.user) {
+            return res.redirect('/sign-in');
+        }
+        // if(!allevents){
+        //     throw 'No Events'
+        // }
+        else{
+            let allevents = await index.events.getAllEvents();
+            return res.status(200).render('upcoming_events',{title:'LearnLocally', head:'LearnLocally',events:allevents});
+        }
+        } catch (e) {
+            res.status(404).render('errorPage', {error:e});
+        }
+        
+
+})
+
+module.exports = router

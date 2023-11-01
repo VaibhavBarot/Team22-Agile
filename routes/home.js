@@ -12,6 +12,7 @@ router.route('/')
         return res.render('./home',{title:'LearnLocally', head:'LearnLocally'});
     }
 });
+    
 
 router.route('/sign-in')
 .get(async (req,res)=>{
@@ -62,26 +63,29 @@ router.route('/sign-out')
     res.redirect('/sign-in'); 
 })
 
-+router.route('/create-event')
-.get(async (req, res) => {
-        return res.render('./create_event', {title: "LearnLocally",head:"LearnLocally"});
+router.route('/create-event')
+  .get(async (req, res) => {
+    if(req.session.user){
+        return res.render('create_event',{title:'LearnLocally', head:'LearnLocally'});
+    }else{
+        return res.redirect('/sign-in');
     }
-)
-.post(async (req, res) => {
-    try {
-        let date = xss(req.body.date);
-        let name = xss(req.body.name);
-        let time = xss(req.body.time)
-        let venue = xss(req.body.venue)
-        let description = xss(req.body.description)
-        let host = xss(req.body.host)
-        await index.events.createEvent(name, date, time, venue, host, description);
-        res.redirect('/create-event');
-    }catch(e) {
-       console.log(e)
-    }
+     
 })
-
+  .post(async (req, res) => {
+      try {
+          let date = xss(req.body.date);
+          let name = xss(req.body.name);
+          let time = xss(req.body.time)
+          let venue = xss(req.body.venue)
+          let description = xss(req.body.description)
+          let host = xss(req.body.host)
+          await index.events.createEvent(name, date, time, venue, host, description);
+          res.redirect('/create-event');
+      }catch(e) {
+         console.log(e)
+      }
+  })
 
 
 module.exports = router;
