@@ -1,6 +1,5 @@
 const { ObjectId } = require('mongodb');
-const mongoCollections = require('../config/mongocollections');
-const events = mongoCollections.events
+const {events} = require('../config/mongocollections');
 
 
 const createEvent = async (name, date, time, venue, host, description) => {
@@ -29,6 +28,19 @@ const createEvent = async (name, date, time, venue, host, description) => {
     return newEvent;
   };
 
+const getAllEvents = async () => {
+  const eventCollection = await events();
+  const eventList = await eventCollection.find({}).toArray();
+  
+  if (!eventList) throw 'Could not get all events';
+  eventList.forEach(element => {
+    element._id=element._id.toString();
+  });
+  return eventList;
+};
+
+
   module.exports={
-    createEvent
+    createEvent,
+    getAllEvents
 }
