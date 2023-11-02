@@ -117,6 +117,14 @@ router.route('/create-event')
   }
 })
 
+router
+.route('/registeredevents')
+.get(async (req, res) => {
+  if(req.session.user){
+    const events = await index.users.registeredEvents(req.session.user.emailId);
+    return res.render('registered_events',{events:events});
+  }  
+})
 
 
 module.exports = router;
