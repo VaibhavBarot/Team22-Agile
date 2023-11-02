@@ -129,8 +129,24 @@ const registerForEvent = async (id, emailid, event) => {
 
 };
 
+const registeredEvents = async (emailid) => {
+  emailid = emailid.trim();
+
+  
+  const userCollection = await users();
+  const user = await userCollection.findOne({
+    emailId: emailid
+  });
+
+  if(user==null){
+      throw "User does not exists";
+  }
+  return user.RegisteredEvents;
+};
+
 module.exports={
   login,
   createUser,
-  registerForEvent
+  registerForEvent,
+  registeredEvents
 }
