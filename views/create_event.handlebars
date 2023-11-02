@@ -1,69 +1,127 @@
 <main>
+   <style>
+      body {
+         font-family: Arial, sans-serif;
+         background-color: #f4f4f4;
+         margin: 0;
+         padding: 0;
+         line-height: 1.6;
+      }
+
+      h2 {
+         text-align: center;
+         background-color: #333;
+         color: #fff;
+         padding: 10px;
+         border-radius: 5px;
+      }
+
+      .input {
+         width: 100%;
+         padding: 8px;
+         border: 1px solid #ccc;
+         border-radius: 4px;
+      }
+
+      .div-text {
+         color: red;
+         margin-left: 10px;
+      }
+
+      .btnq {
+         background-color: #4CAF50;
+         border: none;
+         color: white;
+         padding: 10px 20px;
+         text-align: center;
+         text-decoration: none;
+         display: inline-block;
+         font-size: 16px;
+         border-radius: 5px;
+         cursor: pointer;
+      }
+
+      .btnq:hover {
+         background-color: #45a049;
+      }
+
+      .row {
+         margin: 10px 0;
+      }
+
+      label {
+         display: block;
+         margin-bottom: 5px;
+         font-weight: bold;
+      }
+   </style>
    <div class="row">
       <div class="col-md-5">
          <br>
          <h2>Create an Event</h2>
          <form method="POST" id="createevent-form" action="/create-event">
 
-          <div class="row mb-2">
-         <label for="name" class="col-sm-2 col-form-label">Name : </label>
-         <div class="col-sm-6">
-            <input type="text" size = "25" class="input" id="name" name="name" placeholder="Enter the title of the event">
-         </div>
-         <div id="no-title" class="div-text"  hidden>Please enter the title of the Event</div>
+            <div class="row mb-2">
+               <label for="name" class="col-sm-2 col-form-label">Name : </label>
+               <div class="col-sm-6">
+                  <input type="text" size="25" class="input" id="name" name="name"
+                     placeholder="Enter the title of the event">
+               </div>
+               <div id="no-title" class="div-text" hidden>Please enter the title of the Event</div>
+            </div>
+
+            <div class="row mb-2">
+               <label for="date" class="col-sm-2 col-form-label">Date : </label>
+               <div class="col-sm-6">
+                  <input type="date" class="input" id="date" name="date" placeholder="MM/DD/YYYY">
+               </div>
+               <div id="no-date" class="div-text" hidden>Please enter the date of the Event</div>
+            </div>
+
+
+            <div class="row mb-2">
+               <label for="time" class="col-sm-2 col-form-label">Time : </label>
+               <div class="col-sm-6">
+                  <input type="time" class="input" id="time" name="time" placeholder="XX:YY">
+               </div>
+               <div id="no-date" class="div-text" hidden>Please enter the date of the Event</div>
+            </div>
+
+
+
+            <div class="row mb-2">
+               <label for="Venue" class="col-sm-2 col-form-label">Venue : </label>
+               <div class="col-sm-6">
+                  <input type="text" class="input" id="venue" name="venue" placeholder="Enter the address">
+               </div>
+               <div id="no-first-name" class="div-text" hidden>Please enter your first name</div>
+            </div>
+
+
+            <div class="row mb-2">
+               <label for="host" class="col-sm-2 col-form-label">Host : </label>
+               <div class="col-sm-6">
+                  <input type="text" class="input" id="host" name="host" placeholder="Enter your name">
+               </div>
+               <div id="no-first-name" class="div-text" hidden>Please enter your first name</div>
+            </div>
+
+
+            <div class="row mb-2">
+               <label for="description" class="col-sm-2 col-form-label">Description: </label>
+               <div class="col-sm-6">
+                  <input type="text" size="50" class="input" id="description" name="description"
+                     placeholder="Enter a description of the event">
+               </div>
+               <div id="no-description" class="div-text" hidden>Please enter a description of the Event</div>
+            </div>
+
+
+
+            <br>
+            <input type="submit" class="btnq" value="Create Event">
+         </form>
+         <br>
       </div>
-
-      <div class="row mb-2">
-         <label for="date" class="col-sm-2 col-form-label">Date : </label>
-         <div class="col-sm-6">
-            <input type="date" class="input" id="date" name="date" placeholder="MM/DD/YYYY">
-         </div>
-         <div id="no-date" class="div-text" hidden>Please enter the date of the Event</div>
-      </div>
-
-      
-      <div class="row mb-2">
-         <label for="time" class="col-sm-2 col-form-label">Time : </label>
-         <div class="col-sm-6">
-            <input type="time" class="input" id="time" name="time" placeholder="XX:YY">
-         </div>
-         <div id="no-date" class="div-text" hidden>Please enter the date of the Event</div>
-      </div>
-
-
-
-    <div class="row mb-2">
-         <label for="Venue" class="col-sm-2 col-form-label">Venue : </label>
-         <div class="col-sm-6">
-            <input type="text" class="input" id="venue" name="venue" placeholder="Enter the address">
-         </div>
-         <div id="no-first-name" class="div-text" hidden>Please enter your first name</div>
-      </div>
-
-      
-         <div class="row mb-2">
-         <label for="host" class="col-sm-2 col-form-label">Host : </label>
-         <div class="col-sm-6">
-            <input type="text" class="input" id="host" name="host" placeholder="Enter your name">
-         </div>
-         <div id="no-first-name" class="div-text" hidden>Please enter your first name</div>
-      </div>
-
-
-      <div class="row mb-2">
-         <label for="description" class="col-sm-2 col-form-label">Description : </label>
-         <div class="col-sm-6">
-            <input type="text" size = "50" class="input" id="description" name="description" placeholder="Enter a description of the event">
-         </div>
-         <div id="no-description" class="div-text"  hidden>Please enter a description of the Event</div>
-      </div>
-
-     
-
-      <br>
-      <input type="submit" class="btnq" value="Create Event">
-   </form>
-   <br>
-      </div>
-</div>
+   </div>
 </main>

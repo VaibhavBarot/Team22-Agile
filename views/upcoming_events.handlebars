@@ -1,0 +1,74 @@
+<body>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .wrapper {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #222;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .card {
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        /* Repeating color pattern */
+        .card:nth-child(4n+1) {
+            background-color: #f28c8c;
+            /* Pottery color */
+        }
+
+        .card:nth-child(4n+2) {
+            background-color: #8ccef2;
+            /* Tune color */
+        }
+
+        .card:nth-child(4n+3) {
+            background-color: #aaf28c;
+            /* Python color */
+        }
+
+        .card:nth-child(4n+4) {
+            background-color: #f2e58c;
+            /* Cake color */
+        }
+
+        .card a {
+            color: #000;
+            /* Black text color for links */
+            text-decoration: none;
+            /* Removes the underline */
+        }
+
+        .card a:hover {
+            text-decoration: underline;
+            /* Adds underline on hover */
+        }
+    </style>
+
+    <h2>Upcoming Events and Workshops near you:</h2>
+    <div class="wrapper">
+        {{#each events}}
+        <div class="card"><a href="/allevents/{{_id}}">{{name}}</a></div>
+        {{/each}}
+    </div>
+</body>
