@@ -126,5 +126,15 @@ router
   }  
 })
 
+router
+.route('/unregister')
+.post(async (req, res) => {
+  if(req.session.user){
+    let eventId = xss(req.body.eventId);
+    await index.users.unregisterForEvent(eventId,req.session.user.emailId)
+    return res.redirect('registeredevents')
+  }  
+})
+
 
 module.exports = router;

@@ -144,9 +144,33 @@ const registeredEvents = async (emailid) => {
   return user.RegisteredEvents;
 };
 
+const unregisterForEvent = async (eventId,emailId) => {
+  emailid = emailId.trim();
+  eventid = eventId.trim();
+
+  const userCollection = await users();
+
+  const updateInfo = await userCollection.updateOne({emailId:emailid}, {$pull: {RegisteredEvents : {_id:eventid}}});
+
+
+  if (updateInfo.modifiedCount === 0){
+    throw "Error: Update failed";
+  }
+  if (!updateInfo.acknowledged) {
+    throw "Error: could not be updated";
+  }
+
+
+  return {update: true};
+
+
+};
+
+
 module.exports={
   login,
   createUser,
   registerForEvent,
-  registeredEvents
+  registeredEvents,
+  unregisterForEvent
 }
