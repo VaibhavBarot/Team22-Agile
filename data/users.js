@@ -96,7 +96,41 @@ const login = async (emailId, password) => {
 
 };
 
+const registerForEvent = async (id, emailid, event) => {
+  emailid = emailid.trim();
+
+  
+  const userCollection = await users();
+  
+
+  // let newRegisterRequest={
+    
+  //   eventid:id,
+  //   emailid:emailid,
+  //   RegisteredEvent:event
+  //   ////eventName : event.name (to get event name)
+  //   ////eventDescription : event.description (to get event description)
+  //   ////can do this for name, date, time, venue, host, description
+    
+  // }
+  const updateInfo = await userCollection.updateOne({emailId:emailid}, {$addToSet: {RegisteredEvents : event}});
+
+
+  if (updateInfo.modifiedCount === 0){
+    throw "Error: Update failed";
+  }
+  if (!updateInfo.acknowledged) {
+    throw "Error: could not be updated";
+  }
+
+
+  return {update: true};
+
+
+};
+
 module.exports={
   login,
-  createUser
+  createUser,
+  registerForEvent
 }

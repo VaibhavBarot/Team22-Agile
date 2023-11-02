@@ -76,28 +76,6 @@ const getEventbyId = async(id) => {
   return event;
 };
 
-const registerForEvent = async (id) => {
-
-  const eventCollection = await events();
-  const event = await eventCollection.findOne({_id: new ObjectId(id)});
- 
-
-  let newRegisterRequest={
-    id:id,
-    event : event,
-    ////eventName : event.name (to get event name)
-    ////eventDescription : event.description (to get event description)
-    ////can do this for name, date, time, venue, host, description
-    
-  }
-  const insertInfo = await eventCollection.insertOne(newRegisterRequest);
-    if (!insertInfo.acknowledged || !insertInfo.insertedId){
-      throw 'Error : Could not add user';
-    }
-
-  return newRegisterRequest;
-
-};
 
 
   module.exports={
@@ -105,5 +83,5 @@ const registerForEvent = async (id) => {
     getAllEvents,
     getEventbyId,
     requestEvent,
-    registerForEvent
+    
 }
