@@ -3,7 +3,7 @@ const mongoCollections = require('../config/mongocollections');
 const users = mongoCollections.users
 const bcrypt = require('bcryptjs');
 
-const createUser = async (emailId, password, firstName, lastName) => {
+const createUser = async ( firstName, lastName,emailId, password) => {
 
   emailId = emailId.trim().toLowerCase();
   password = password.trim();
