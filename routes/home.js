@@ -3,6 +3,13 @@ const router = express.Router();
 const index = require('../data/index');
 const xss = require('xss');
 
+router.use(async(req,res,next) => {
+    if(req.session.user){
+        res.locals.isLoggedIn = true
+    }
+    next();
+})
+
 router.route('/')
 .get(async (req,res)=>{
     if (!req.session.user) {
@@ -12,6 +19,7 @@ router.route('/')
         return res.render('./home',{title:'LearnLocally', head:'LearnLocally'});
     }
 });
+    
 
 router.route('/sign-in')
 .get(async (req,res)=>{
@@ -62,26 +70,71 @@ router.route('/sign-out')
     res.redirect('/sign-in'); 
 })
 
-+router.route('/create-event')
+router.route('/create-event')
+  .get(async (req, res) => {
+    if(req.session.user){
+        return res.render('create_event',{title:'LearnLocally', head:'LearnLocally'});
+    }else{
+        return res.redirect('/sign-in');
+    }
+     
+})
+  .post(async (req, res) => {
+      try {
+          let date = xss(req.body.date);
+          let name = xss(req.body.name);
+          let email = xss(req.body.emailIdInput)
+          let time = xss(req.body.time)
+          let venue = xss(req.body.venue)
+          let description = xss(req.body.description)
+          let host = xss(req.body.host)
+          await index.events.createEvent(name, email, date, time, venue, host, description);
+          res.redirect('/create-event');
+      }catch(e) {
+         console.log(e)
+      }
+  })
+
+  router
+.route('/allevents/request-event')
 .get(async (req, res) => {
-        return res.render('./create_event', {title: "LearnLocally",head:"LearnLocally"});
-    }
-)
-.post(async (req, res) => {
-    try {
-        let date = xss(req.body.date);
-        let name = xss(req.body.name);
-        let time = xss(req.body.time)
-        let venue = xss(req.body.venue)
-        let description = xss(req.body.description)
-        let host = xss(req.body.host)
-        await index.events.createEvent(name, date, time, venue, host, description);
-        res.redirect('/create-event');
-    }catch(e) {
-       console.log(e)
-    }
+  if(req.session.user){
+      return res.render('request_event',{title:'LearnLocally', head:'LearnLocally'});
+  }else{
+      return res.redirect('/sign-in');
+  }
+   
 })
 
+.post(async (req, res) => {
+  try {
+      let emailId = xss(req.body.emailIdInput);
+      let description = xss(req.body.description)
+      await index.events.requestEvent(emailId, description);
+      res.redirect('/allevents/request-event');
+  }catch(e) {
+     console.log(e)
+  }
+})
+
+router
+.route('/registeredevents')
+.get(async (req, res) => {
+  if(req.session.user){
+    const events = await index.users.registeredEvents(req.session.user.emailId);
+    return res.render('registered_events',{events:events});
+  }  
+})
+
+router
+.route('/unregister')
+.post(async (req, res) => {
+  if(req.session.user){
+    let eventId = xss(req.body.eventId);
+    await index.users.unregisterForEvent(eventId,req.session.user.emailId)
+    return res.redirect('registeredevents')
+  }  
+})
 
 
 module.exports = router;
