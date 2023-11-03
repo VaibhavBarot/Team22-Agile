@@ -33,6 +33,8 @@ Clone project to local repository in terminal run these commands
 
 "npm i" Install all dependencies
 
+"node seed.js" Run seed file to populate database
+
 "npm start" Run the app
 
 "npm test" Run test cases using jasmine
