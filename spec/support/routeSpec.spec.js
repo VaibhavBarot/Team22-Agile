@@ -8,7 +8,7 @@ describe('Test endpoints', () => {
       const res = await axios
         .get(root)
         expect(res.status).toBe(200);
-
+        
     });
 
     it('should return HTTP 404 for non existing routes', async () => {

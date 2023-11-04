@@ -33,6 +33,13 @@
     .navbar .navbar-brand h1 {
       color: white
     }
+
+    #message-icon{
+      margin-top:50%;
+      height: 20px;
+      width: 20px;
+    }
+
   </style>
   <title>{{title}}</title>
 </head>
@@ -69,10 +76,17 @@
           <li class="nav-item">
             <a class="nav-link" href="/create-event">Create an Event</a>
           </li>
-
+          <li class="nav-item">
+            <a class="nav-link" href="/send-message">Send Message</a>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="/sign-out">Sign-out</a>
           </li>
+        {{#if messages}}
+          <a href="/view-messages">
+            <img src="https://www.svgrepo.com/show/304531/notification-alert.svg" id="message-icon" alt="unread-message-icon">
+          </a>
+        {{/if}}
 
 
         {{/if}}
@@ -83,6 +97,7 @@
   {{{body}}}
 
   <p class="error">{{{error}}}</p>
+  <p>{{message}}</p>
 </body>
 
 </html>

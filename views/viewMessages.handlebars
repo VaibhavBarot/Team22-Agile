@@ -1,0 +1,25 @@
+<style>
+    #messages-container{
+        overflow-y: scroll;
+    }
+    .from{
+        background-color: chartreuse;
+    }
+    .messages{
+        background-color: aqua;
+        margin-bottom: 5vh;
+        height: 15vh;
+        overflow-y: scroll;
+    }
+</style>
+{{#if messages.length}}
+<div id="messages-container">
+    {{#each messages}}
+        <div class="from">From: {{this.email}}</div>
+        <div class="messages">{{this.description}}</div>
+    {{/each}}
+    <form method="POST" action="/read-messages">   
+     <button>Mark All As Read</button>
+    </form>
+</div>
+{{/if}}

@@ -167,10 +167,80 @@ const unregisterForEvent = async (eventId,emailId) => {
 };
 
 
+  const postMessage = async (email,description) => {
+
+    email = email.trim()
+    description = description.trim()
+
+    let newEvent ={
+      email:email,
+      description:description
+    }
+    const userCollection = await users();
+    const user = await userCollection.findOne({
+      emailId: email
+    });
+    if(user===null){
+      throw "Invalid Email";
+    }
+
+    const messages = (user.messages) ? user.messages : [];
+    messages.push(newEvent)
+    const insertInfo = await userCollection.updateOne(
+      {emailId:email},
+      {
+      $set:{
+        messages:messages
+      }
+    });
+      if (!insertInfo.acknowledged){
+        throw 'Error : Could not send message';
+      }
+
+    return newEvent;
+  };
+
+  const retrieveMessages = async (email) => {
+
+    email = email.trim()
+
+    const userCollection = await users();
+    const user = await userCollection.findOne({
+      emailId: email
+    });
+    if(user===null){
+      throw "Invalid Email";
+    }
+
+    return user.messages;
+  };
+
+  const readMessages = async (email) => {
+
+    email = email.trim()
+
+    const userCollection = await users();
+    const user = await userCollection.findOne({
+      emailId: email
+    });
+    if(user===null){
+      throw "Invalid Email";
+    }
+    await userCollection.updateOne({emailId:email},{
+      $unset:{messages:1}
+    })
+
+    return user.messages;
+  };
+
+
 module.exports={
   login,
   createUser,
   registerForEvent,
   registeredEvents,
-  unregisterForEvent
+  unregisterForEvent,
+  postMessage,
+  retrieveMessages,
+  readMessages
 }
