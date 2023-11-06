@@ -38,7 +38,11 @@ router.route('/sign-in')
 
         let user = await index.users.login(emailId, password);
         req.session.user = {emailId: emailId, firstName:user.firstName, lastName:user.lastName};
-        res.redirect('/');
+        const messages = await index.users.retrieveMessages(req.session.user.emailId);
+        let unreadMessage = (messages?.length) ? true:false;
+        res.locals.messages = unreadMessage;
+        res.locals.isLoggedIn = true
+        return res.render('./home',{title:'LearnLocally', head:'LearnLocally'})
     }catch(e) {
         return res.status(404).render('./sign_in', {title: "Sign-in Page", error: e})
     }
@@ -147,7 +151,7 @@ router.route('/send-message')
         let email = xss(req.body.email)
         let description = xss(req.body.description)
     
-        await index.users.postMessage(email,description);
+        await index.users.postMessage(req.session.user.emailId,email,description);
         return res.status(200).render('./sendMessage', {message: 'Message successfully sent!'})
     }catch(e) {
         return res.status(404).render('./sendMessage', {title: "Message", error: e})
