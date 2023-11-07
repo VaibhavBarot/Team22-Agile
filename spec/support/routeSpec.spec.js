@@ -13,8 +13,7 @@ describe('Test endpoints', () => {
 
     it('should return HTTP 404 for non existing routes', async () => {
         try {
-            await axios
-            .get(root + '/invalidRoute')
+            await axios.get(root + '/invalidRoute')
         }
         catch(e){
             expect(e.response.status).toBe(404);
@@ -25,7 +24,7 @@ describe('Test endpoints', () => {
         testUserEmail = 'test@' + Math.floor(Math.random() * 100) + '.com'
         const res = await axios.post(root + 'sign-up',{
             emailIdInput:testUserEmail,
-            passwordInput:'Test@123',
+            passwordInput:'Qwerty@123',
             firstName:'Test',
             lastName:'Test'
         })
@@ -35,7 +34,7 @@ describe('Test endpoints', () => {
       it('should sign into an account', async () => {
         const res = await axios.post(root + 'sign-in', {
             emailIdInput:testUserEmail,
-            passwordInput:'Test@123'
+            passwordInput:'Qwerty@123'
         })
         expect(res.status).toBe(200);
       })
