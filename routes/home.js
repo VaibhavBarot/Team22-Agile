@@ -5,6 +5,9 @@ const xss = require('xss');
 
 router.use(async(req,res,next) => {
     if(req.session.user){
+        const messages = await index.users.retrieveMessages(req.session.user.emailId);
+        let unreadMessage = (messages?.length) ? true:false;
+        res.locals.messages = unreadMessage;
         res.locals.isLoggedIn = true
     }
     next();
@@ -133,8 +136,44 @@ router
     let eventId = xss(req.body.eventId);
     await index.users.unregisterForEvent(eventId,req.session.user.emailId)
     return res.redirect('registeredevents')
-  }  
+  }})
+  
+router.route('/send-message')
+.get(async (req,res) => {
+    res.render('./sendMessage')
+})
+.post(async (req,res) => {
+    try{
+        let email = xss(req.body.email)
+        let description = xss(req.body.description)
+    
+        await index.users.postMessage(email,description);
+        return res.status(200).render('./sendMessage', {message: 'Message successfully sent!'})
+    }catch(e) {
+        return res.status(404).render('./sendMessage', {title: "Message", error: e})
+    }
 })
 
+router.route('/view-messages')
+.get(async (req,res) => {
+    try{
+            const messages = await index.users.retrieveMessages(req.session.user.emailId);
+            res.render('./viewMessages',{messages:messages})
+    }catch(e){
+        return res.status(404).render('./viewMessages', {title: "Message", error: e})
+    }
+})
+
+router.route('/read-messages')
+.post(async (req,res) => {
+    try{
+            await index.users.readMessages(req.session.user.emailId);
+            res.locals.messages = false;
+            res.status(200).render('./viewMessages');
+
+    }catch(e){
+        return res.status(404).render('./viewMessages', {title: "Message", error: e})
+    }
+})
 
 module.exports = router;
