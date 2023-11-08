@@ -15,7 +15,8 @@
     "express-handlebars": "^6.0.6",
     "express-session": "^1.17.3",
     "jasmine": "^5.1.0",
+    "jsdom": "^22.1.0",
     "xss": "^1.0.14"
   }
-
+  
 }

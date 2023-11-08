@@ -151,18 +151,19 @@ const unregisterForEvent = async (eventId,emailId) => {
 };
 
 
-  const postMessage = async (email,description) => {
+  const postMessage = async (from,to,description) => {
 
-    email = email.trim()
+    to = to.trim()
+    from = from.trim()
     description = description.trim()
 
     let newEvent ={
-      email:email,
+      email:from,
       description:description
     }
     const userCollection = await users();
     const user = await userCollection.findOne({
-      emailId: email
+      emailId: to
     });
     if(user===null){
       throw "Invalid Email";
@@ -171,7 +172,7 @@ const unregisterForEvent = async (eventId,emailId) => {
     const messages = (user.messages) ? user.messages : [];
     messages.push(newEvent)
     const insertInfo = await userCollection.updateOne(
-      {emailId:email},
+      {emailId:to},
       {
       $set:{
         messages:messages
