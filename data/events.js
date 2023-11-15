@@ -1,6 +1,6 @@
 const { ObjectId } = require('mongodb');
 const {events} = require('../config/mongocollections');
-
+const {reports} = require('../config/mongocollections')
 
 const createEvent = async (name, email, date, time, venue, host, description) => {
 
@@ -76,6 +76,35 @@ const getEventbyId = async(id) => {
   return event;
 };
 
+const createReport = async(reporterID, reportedUserId, comment) => {
+  const reportCollection = await reports();
+  try {
+    console.log("Information about the report");
+    console.log(reporterID);
+    console.log(reportedUserId);
+    console.log(comment);
+
+    
+    //return "Done from event data file"
+    let reportObj ={
+      _id: new ObjectId(),
+      reporterID: reporterID,
+      reportedUserId: reportedUserId,
+      comment: comment
+    }
+
+    console.log("reporter obj");
+    console.log(reportObj);
+    const report = await reportCollection.insertOne(reportObj)
+    if (!report.acknowledged || !report.insertedId){
+      throw 'Error : Could not add report';
+    }
+    return reportObj
+  } catch (error) {
+    return error;
+  }
+}
+
 
 
   module.exports={
@@ -83,5 +112,5 @@ const getEventbyId = async(id) => {
     getAllEvents,
     getEventbyId,
     requestEvent,
-    
+    createReport
 }

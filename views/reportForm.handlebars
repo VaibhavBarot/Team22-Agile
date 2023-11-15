@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report Form</title>
+  <style>
+    
+
+    .card {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      width: 300px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+    .success-card, .error-card {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-top: 20px;
+      display: none; /* Initially hidden */
+    }
+
+    .success-card {
+      background-color: #4CAF50;
+      color: #fff;
+    }
+
+    .error-card {
+      background-color: #f44336;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>{{successMsg}}</h1>
+    <form action="/allevents/api/report" method="post">
+      <label for="reportedUserId">Reported User ID:</label>
+      <input type="text" id="reportedUserId" name="reportedUserId" required>
+
+      <label for="comment">Comment:</label>
+      <textarea id="comment" name="comment" rows="4" required></textarea>
+
+      <button type="submit">Report</button>
+    </form>
+  </div>
+
+
+</body>
+</html>
