@@ -76,25 +76,25 @@ const getEventbyId = async(id) => {
   return event;
 };
 
-const createReport = async(reporterID, reportedUserId, comment) => {
+const createReport = async(reporterEmailID, reportedEmailId, comment) => {
   const reportCollection = await reports();
   try {
-    console.log("Information about the report");
-    console.log(reporterID);
-    console.log(reportedUserId);
-    console.log(comment);
+    // console.log("Information about the report");
+    // console.log(reporterEmailID);
+    // console.log(reportedEmailId);
+    // console.log(comment);
 
     
     //return "Done from event data file"
     let reportObj ={
       _id: new ObjectId(),
-      reporterID: reporterID,
-      reportedUserId: reportedUserId,
+      reporterEmailID: reporterEmailID,
+      reportedEmailId: reportedEmailId,
       comment: comment
     }
 
-    console.log("reporter obj");
-    console.log(reportObj);
+    // console.log("reporter obj");
+    // console.log(reportObj);
     const report = await reportCollection.insertOne(reportObj)
     if (!report.acknowledged || !report.insertedId){
       throw 'Error : Could not add report';
