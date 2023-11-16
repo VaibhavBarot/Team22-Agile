@@ -1,18 +1,86 @@
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+    }
+
+    .main-content {
+        width: 60%;
+        margin: 0 auto;
+        padding: 20px;
+        text-align: center;
+    }
+
+    h2 {
+        color: #333;
+    }
+
+    .events {
+        margin: 8px 0;
+        padding: 20px;
+        font-size: 1.2em;
+        border-radius: 5px;
+
+    }
+
+
+    .events:nth-of-type(4n+1) {
+        background-color: #ffcccb;
+
+    }
+
+    .events:nth-of-type(4n+2) {
+        background-color: #add8e6;
+
+    }
+
+    .events:nth-of-type(4n+3) {
+        background-color: #90ee90;
+
+    }
+
+    .events:nth-of-type(4n) {
+        background-color: #ffffe0;
+
+    }
+
+    .events a {
+        text-decoration: none;
+        color: #000;
+    }
+
+    .events a:hover {
+        text-decoration: underline;
+    }
+
+    button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 20px 0;
+        border: none;
+        cursor: pointer;
+        width: 50%;
+        font-size: 1.2em;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+</style>
+
 <body>
-    <br>
-    <h2>Upcoming Events and Workshops near you:</h2>
-    {{#each events}}
+
+    <div class="main-content">
+        <h2>Upcoming Events and Workshops near you:</h2>
+        {{#each events}}
         <div class="events"><a href="/allevents/{{_id}}">{{name}}</a></div>
-    {{/each}}
+        {{/each}}
 
-    <br>
-    <br>
-    <br>
-
-    <form action = "/allevents/request-event">
-    <button type = "submit">Click here to request for an event!</button>
-    </form>
-
-
-
+        <form action="/allevents/request-event">
+            <button type="submit">Click here to request for an event!</button>
+        </form>
+    </div>
 </body>
