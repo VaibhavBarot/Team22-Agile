@@ -1,5 +1,6 @@
 const { ObjectId } = require('mongodb');
-const {events} = require('../config/mongocollections');
+const {events,reviews} = require('../config/mongocollections');
+const session = require('express-session');
 
 
 const createEvent = async (name, email, date, time, venue, host, description) => {
@@ -18,7 +19,8 @@ const createEvent = async (name, email, date, time, venue, host, description) =>
       time:time,
       venue:venue,
       host:host,
-      description:description
+      description:description,
+      rating:rating
     }
 
     const insertInfo = await eventCollection.insertOne(newEvent);
@@ -58,29 +60,20 @@ const getAllEvents = async () => {
   eventList.forEach(element => {
     element._id=element._id.toString();
   });
-  return eventList;
-};
-
-const getAllHostedEvents = async (email) => {
-  const eventCollection = await events();
-  const eventList = await eventCollection.find({email:email}).toArray();
 
   
-  if (!getAllHostedEvents) throw 'Could not get hosted events';
-  eventList.forEach(element => {
-    element._id=element._id.toString();
-  });
   return eventList;
 };
 
 const getEventbyId = async(id) => {
+
   if (!id) throw 'You must provide an id to search for';
   if (typeof id !== 'string') throw 'Id must be a string';
   if (id.trim().length === 0)
     throw 'Id cannot be an empty string or just spaces';
   id = id.trim();
   if (!ObjectId.isValid(id)) throw 'invalid object ID';
-  
+
   const eventCollection = await events();
   const event = await eventCollection.findOne({_id: new ObjectId(id)});
   if (event === null) throw 'No event with that id';
@@ -88,13 +81,38 @@ const getEventbyId = async(id) => {
   return event;
 };
 
+const getreviewsbyId = async(id) => {
 
+  if (!id) throw 'You must provide an id to search for';
+  if (typeof id !== 'string') throw 'Id must be a string';
+  if (id.trim().length === 0)
+    throw 'Id cannot be an empty string or just spaces';
+  const reviewCollection = await reviews();
+  const eventReviews = await reviewCollection.find({eventId: id}).toArray();
+  if (eventReviews === null) throw 'No Reviews with that id';
+
+  return eventReviews;
+};
+
+const getreviewbyId = async(id) => {
+
+  if (!id) throw 'You must provide an id to search for';
+  if (typeof id !== 'string') throw 'Id must be a string';
+  if (id.trim().length === 0)
+    throw 'Id cannot be an empty string or just spaces';
+  const reviewCollection = await reviews();
+  const eventReviews = await reviewCollection.findOne({_id: new ObjectId(id)});
+  if (eventReviews === null) throw 'No Reviews with that id';
+
+  return eventReviews;
+};
 
   module.exports={
     createEvent,
     getAllEvents,
     getEventbyId,
     requestEvent,
-    getAllHostedEvents
+    getreviewsbyId,
+    getreviewbyId
     
 }

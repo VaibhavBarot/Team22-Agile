@@ -1,0 +1,28 @@
+<main>
+   <div class="row">
+      <div class="col-md-12">
+         <br>
+         <h2>Submit Review</h2>
+         <form method="POST" id="postmessage-form" action="/submit-review/{{eventId}}">
+
+          
+<div class="row md-12">
+         <label for="description" class="col-sm-2 col-form-label">Review Type : </label>
+         <div class="col-sm-12">
+            <input class="input" cols="100" rows="5" id="title" name="title" value="{{title}}">
+         </div>
+      </div> 
+      <div class="row md-12">
+         <label for="description" class="col-sm-2 col-form-label">Review Comment : </label>
+         <div class="col-sm-12">
+            <textarea class="input" cols="100" rows="5" id="description" name="description">{{desc}}</textarea>
+         </div>
+      </div>    
+      <input type="hidden" name="eventId" value={{eventId}}>
+      <br>
+      <input type="submit" class="btnq" value="Submit">
+   </form>
+   <br>
+      </div>
+</div>
+</main>

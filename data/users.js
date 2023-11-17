@@ -1,14 +1,17 @@
 const { ObjectId } = require('mongodb');
 const mongoCollections = require('../config/mongocollections');
 const users = mongoCollections.users
+const reviews = mongoCollections.reviews
+const ratings = mongoCollections.ratings
 const bcrypt = require('bcryptjs');
 const validation = require('../helper')
 
-const createUser = async ( emailId, password, firstName, lastName) => {
+const createUser = async ( firstName, lastName,emailId, password) => {
 
   emailId = emailId.trim().toLowerCase();
   password = password.trim();
 
+  
   if (!emailId || !password) 
     throw `Email or Password cannot be empty`;
   if (typeof emailId != "string") 
@@ -219,6 +222,87 @@ const unregisterForEvent = async (eventId,emailId) => {
   };
 
 
+  const submitReview = async (from,title,description,eventId) => {
+      
+    title = title.trim();
+    from = from.trim();
+    description = description.trim();
+
+    if(!title){
+      throw "Please enter title";
+    }
+    if(!description){
+      throw "Please enter comment";
+    }
+    let subReview ={
+      eventId:eventId,
+      email:from,
+      title:title,
+      description:description
+    }
+
+    const userCollection = await users();
+    const user = await userCollection.findOne({
+      emailId: from
+    });
+    if(user===null){
+      throw "Invalid Email";
+    }
+    const reviewCollection = await reviews();
+    const messages = (user.messages) ? user.messages : [];
+    messages.push(subReview)
+    const insertInfo = await reviewCollection.insertOne(subReview,
+      {
+      $set:{
+        messages:messages
+      }
+    });
+      if (!insertInfo.acknowledged){
+        throw 'Error : Could not send message';
+      }
+
+    return subReview;
+  };
+
+
+
+  const submitRating = async (from,rid,eventId) => {
+      
+    rid = rid.trim();
+    from = from.trim();
+    eventId = eventId.trim();
+    console.log(rid);
+
+    let subRate ={
+      eventId:eventId,
+      email:from,
+      rid:rid,
+     }
+
+    const userCollection = await users();
+    const user = await userCollection.findOne({
+      emailId: from
+    });
+    if(user===null){
+      throw "Invalid Email";
+    }
+    const rateCollection = await ratings();
+    const messages = (user.messages) ? user.messages : [];
+    messages.push(subRate)
+    const insertInfo = await rateCollection.insertOne(subRate,
+      {
+      $set:{
+        messages:messages
+      }
+    });
+      if (!insertInfo.acknowledged){
+        throw 'Error : Could not send message';
+      }
+
+    return subRate;
+  };
+
+
 module.exports={
   login,
   createUser,
@@ -227,5 +311,7 @@ module.exports={
   unregisterForEvent,
   postMessage,
   retrieveMessages,
-  readMessages
+  readMessages,
+  submitReview,
+  submitRating
 }

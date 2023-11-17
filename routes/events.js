@@ -3,6 +3,7 @@ const router = express.Router();
 const eventData = require('../data/events');
 const index = require('../data/index');
 const xss = require('xss');
+const { reviews } = require('../config/mongocollections');
 
 router
 .route('/')
@@ -33,8 +34,12 @@ router
             return res.redirect('/sign-in');
         }
         else {
+                 let ratings =  [{rate:1,eventId:req.params.id},{rate:2,eventId:req.params.id},{rate:3,eventId:req.params.id},{rate:4,eventId:req.params.id},{rate:5,eventId:req.params.id}]    
+            let eventReviews = await index.events.getreviewsbyId(req.params.id);
+            console.log(eventReviews);
             let details = await index.events.getEventbyId(req.params.id);
-            return res.render('event_details',{title:'LearnLocally', head:'LearnLocally',name:details.name, date:details.date, time:details.time, venue: details.venue, host: details.host, description: details.description});
+            req.session.eventId= details;
+            return res.render('event_details',{title:'LearnLocally', head:'LearnLocally',name:details.name, date:details.date, time:details.time, venue: details.venue, host: details.host, description: details.description,eventId: details._id, reviews: eventReviews,rates:ratings});
         }
     } catch (e) {
         return res.status(404).render('errorPage',{error:e});
@@ -55,5 +60,5 @@ router
     }
   })
   
-
+  
 module.exports = router

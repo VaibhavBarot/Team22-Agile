@@ -1,65 +1,65 @@
-<style>
-    .event-card {
-        border-radius: 5px;
-        padding: 20px;
-        margin: 20px auto;
-        color: #333;
-        max-width: 600px;
-
-    }
-
-    .btnq {
-        display: block;
-        width: 100%;
-        padding: 10px;
-        margin-top: 20px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        cursor: pointer;
-    }
-
-    .btnq:hover {
-        background-color: #45a049;
-    }
-
-    #heading {
-        margin-bottom: 20px;
-    }
-
-    div {
-        margin-bottom: 10px;
-    }
-</style>
-
 <main>
-    <div class="row">
-        <div class="col-md-5 event-card" style="background-color: {{color}};">
-            <br>
-            <h2 id="heading">{{name}}</h2>
-            <form method="POST" id="eventdetails-form" action="?">
-                <div id="name">
-                    <strong>Name:</strong> {{name}}
-                </div>
-                <div id="date">
-                    <strong>Date:</strong> {{date}}
-                </div>
-                <div id="time">
-                    <strong>Time:</strong> {{time}}
-                </div>
-                <div id="venue">
-                    <strong>Venue:</strong> {{venue}}
-                </div>
-                <div id="host">
-                    <strong>Host:</strong> {{host}}
-                </div>
-                <div id="description">
-                    <strong>Description:</strong> {{description}}
-                </div>
-
-                <input type="submit" class="btnq" value="Register for event">
-            </form>
-            <br>
-        </div>
+   <div class="row">
+      <div class="col-md-5">
+         <br>
+         <h2 id="heading">Event Details</h2>
+         <form method="POST" id="eventdetails-form" action="?">
+    <div id="name">
+        <strong>Name:</strong> {{name}}
     </div>
+    <div id="date">
+        <strong>Date:</strong> {{date}}
+    </div>
+    <div id="time">
+        <strong>Time:</strong> {{time}}
+    </div>
+    <div id="venue">
+        <strong>Venue:</strong> {{venue}}
+    </div>
+    <div id="host">
+        <strong>Host:</strong> {{host}}
+    </div>
+    <div id="description">
+        <strong>Description:</strong> {{description}}
+    </div>
+    {{!-- <div id="rating">
+        <strong>Rating:</strong> 
+        <ul class="list-inline rating-list" >
+            {{#each rates}}
+           <li>
+                <a href="/submit-rating/{{this.rate}}/{{this.eventId}}" ><i class="fa fa-star"></i></a>
+            </li> 
+         {{/each}}
+            
+      </ul>
+        </div> --}}
+    
+    <input type="submit" class="btnq" value="Register for event">
+   </form>
+ 
+   <a href="/submit-review/{{eventId}}">
+   <input type="submit" class="btnq" value="Submit Review">
+   <br></a>
+
+    
+</div>
+<div class="col-md-5">
+     <h2 id="heading">User Reviews</h2>
+     {{#each reviews}}
+<div class="events">
+    {{this.title}} 
+</div>
+    <div class="events">
+    {{this.description}} 
+</div>  
+ <div class="events">
+    <a href="/edit-review/{{this._id}}">Edit</a>
+    <a href="">Delete</a>
+</div>  
+
+    
+
+{{/each}}
+</div>
+</div>
 </main>
