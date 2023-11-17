@@ -1,0 +1,14 @@
+<h1>{{user.firstName}}'s Profile</h1>
+<p>Name: {{user.firstName}} {{user.lastName}}</p>
+<p>City: {{user.city}}</p>
+
+{{#if user.bio}}
+  <p>Bio: {{user.bio}}</p>
+{{else}}
+  <h2>Add Bio</h2>
+  <form action="/profile/add-bio" method="post">
+    <label for="bio">Bio:</label>
+    <textarea id="bio" name="bio"></textarea>
+    <button type="submit">Add Bio</button>
+  </form>
+{{/if}}

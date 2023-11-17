@@ -4,7 +4,7 @@ const users = mongoCollections.users
 const bcrypt = require('bcryptjs');
 const validation = require('../helper')
 
-const createUser = async ( emailId, password, firstName, lastName) => {
+const createUser = async ( emailId, password, firstName, lastName, city) => {
 
   emailId = emailId.trim().toLowerCase();
   password = password.trim();
@@ -31,7 +31,7 @@ const createUser = async ( emailId, password, firstName, lastName) => {
 
   firstName = await validation.checkName(firstName, "First Name");
   lastName = await validation.checkName(lastName, "Last Name");
-
+  city = await validation.checkName(city, "City");
   const userCollection = await users();
 
   const existingUser = await userCollection.findOne({ emailId: emailId });
@@ -46,7 +46,10 @@ const createUser = async ( emailId, password, firstName, lastName) => {
     emailId:emailId,
     password:hash,
     firstName:firstName,
-    lastName:lastName
+    lastName:lastName,
+    city: city, 
+    bio: "",  
+    profilePicture: ""
 
   }
 
