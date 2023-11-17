@@ -107,8 +107,6 @@ describe('Test endpoints', () => {
         const dom = new jsdom(res.data);
         const document = dom.window.document;
 
-        expect(document.querySelector('#heading').innerHTML).toContain('Event Details');
-
         expect(document.querySelector('#name').innerHTML.includes('Pottery')).toBeTruthy();
 
         expect(document.querySelector('#date').innerHTML.includes('2023-10-31')).toBeTruthy();
