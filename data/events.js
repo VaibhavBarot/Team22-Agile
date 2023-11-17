@@ -61,6 +61,18 @@ const getAllEvents = async () => {
   return eventList;
 };
 
+const getAllHostedEvents = async (email) => {
+  const eventCollection = await events();
+  const eventList = await eventCollection.find({email:email}).toArray();
+
+  
+  if (!getAllHostedEvents) throw 'Could not get hosted events';
+  eventList.forEach(element => {
+    element._id=element._id.toString();
+  });
+  return eventList;
+};
+
 const getEventbyId = async(id) => {
   if (!id) throw 'You must provide an id to search for';
   if (typeof id !== 'string') throw 'Id must be a string';
@@ -112,5 +124,6 @@ const createReport = async(reporterEmailID, reportedEmailId, comment) => {
     getAllEvents,
     getEventbyId,
     requestEvent,
-    createReport
+    createReport,
+    getAllHostedEvents
 }

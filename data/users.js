@@ -4,7 +4,7 @@ const users = mongoCollections.users
 const bcrypt = require('bcryptjs');
 const validation = require('../helper')
 
-const createUser = async ( firstName, lastName,emailId, password) => {
+const createUser = async ( emailId, password, firstName, lastName) => {
 
   emailId = emailId.trim().toLowerCase();
   password = password.trim();
