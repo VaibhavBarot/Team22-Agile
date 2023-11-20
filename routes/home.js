@@ -194,9 +194,9 @@ router.route('/submit-review/:id')
             let title = xss(req.body.title);
            let description = xss(req.body.description)
            let eventId = xss(req.params.id);
-  
+           let rId = xss(req.body.rId);
            
-          await index.users.submitReview(req.session.user.emailId,title,description,eventId);
+          await index.users.submitReview(req.session.user.emailId,title,description,eventId,rId);
           //return res.redirect('./allevents/'+eventId)
           res.redirect('/allevents/'+eventId);
           //return res.status(200).render('./allevents/'+eventId, {message: 'Review submitted successfully.'})
@@ -214,15 +214,30 @@ router.route('/submit-review/:id')
       res.redirect('/allevents/'+eventId);
   })
 
-  router.route('/edit-review/:id')
+  router.route('/edit-review/:id/:eventId')
   .get(async (req,res) => {
       
-      let eventId= req.params.id;
-      console.log(eventId);
+      let rId= req.params.id;
+      let eventId= req.params.eventId;
+    
       //await index.users.submitRating(req.session.user.emailId,rateId,eventId);
       let revDetails = await index.events.getreviewbyId(req.params.id);
       //res.redirect('/submit-review/'+eventId+'/1' )
-      res.render('./submitReview',{eventId:eventId,title:revDetails.title,desc:revDetails.description} )
+      res.render('./submitReview',{eventId:eventId,rId:rId,title:revDetails.title,desc:revDetails.description} )
+      
+  })
+
+  router.route('/delete-review/:id/:eventId')
+  .get(async (req,res) => {
+      
+      let eventId= req.params.eventId;
+      let rId = req.params.id;
+      console.log(eventId);
+      //await index.users.submitRating(req.session.user.emailId,rateId,eventId);
+       let revDetails = await index.events.deleteReviewbyId(rId);
+        
+      //res.redirect('/submit-review/'+eventId+'/1' )
+     res.redirect('/allevents/'+eventId);
       
   })
   

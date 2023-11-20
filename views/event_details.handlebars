@@ -22,17 +22,22 @@
     <div id="description">
         <strong>Description:</strong> {{description}}
     </div>
-    {{!-- <div id="rating">
+    <div id="rating">
         <strong>Rating:</strong> 
         <ul class="list-inline rating-list" >
             {{#each rates}}
-           <li>
-                <a href="/submit-rating/{{this.rate}}/{{this.eventId}}" ><i class="fa fa-star"></i></a>
+           <li> 
+                <a href="/submit-rating/{{this.rate}}/{{this.eventId}}" >
+                {{#if this.rid }}
+                <i class="fa fa-star selected"></i>
+                 {{else}} 
+                 <i class="fa fa-star"></i>
+                 {{/if}}</a>
             </li> 
          {{/each}}
             
       </ul>
-        </div> --}}
+        </div>
     
     <input type="submit" class="btnq" value="Register for event">
    </form>
@@ -53,8 +58,8 @@
     {{this.description}} 
 </div>  
  <div class="events">
-    <a href="/edit-review/{{this._id}}">Edit</a>
-    <a href="">Delete</a>
+    <a href="/edit-review/{{this._id}}/{{this.eventId}}">Edit</a>
+    <a href="/delete-review/{{this._id}}/{{this.eventId}}">Delete</a>
 </div>  
 
     

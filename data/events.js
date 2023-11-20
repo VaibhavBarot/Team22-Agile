@@ -107,12 +107,24 @@ const getreviewbyId = async(id) => {
   return eventReviews;
 };
 
+const deleteReviewbyId  = async(id) => {
+  console.log('review id:.........'+id);
+  const reviewCollection = await reviews();
+  try {
+     const eventReviews = await reviewCollection.deleteOne({"_id": new ObjectId(id)});
+ } catch (e) {
+    print(e);
+ }
+  
+};
+
   module.exports={
     createEvent,
     getAllEvents,
     getEventbyId,
     requestEvent,
     getreviewsbyId,
-    getreviewbyId
+    getreviewbyId,
+    deleteReviewbyId
     
 }

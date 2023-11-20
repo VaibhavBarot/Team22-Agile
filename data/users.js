@@ -222,7 +222,7 @@ const unregisterForEvent = async (eventId,emailId) => {
   };
 
 
-  const submitReview = async (from,title,description,eventId) => {
+  const submitReview = async (from,title,description,eventId,rId) => {
       
     title = title.trim();
     from = from.trim();
@@ -249,14 +249,15 @@ const unregisterForEvent = async (eventId,emailId) => {
       throw "Invalid Email";
     }
     const reviewCollection = await reviews();
-    const messages = (user.messages) ? user.messages : [];
-    messages.push(subReview)
-    const insertInfo = await reviewCollection.insertOne(subReview,
-      {
-      $set:{
-        messages:messages
-      }
-    });
+    //const insertInfo;
+    console.log('review id:....'+rId)
+    if(rId){
+      insertInfo = await reviewCollection.updateOne({"_id": new ObjectId(rId)}, {$set: {"title":title,"description":description}});
+    } else {
+      insertInfo = await reviewCollection.insertOne(subReview);
+    }
+    
+    
       if (!insertInfo.acknowledged){
         throw 'Error : Could not send message';
       }
