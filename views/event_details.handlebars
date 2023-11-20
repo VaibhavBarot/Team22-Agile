@@ -26,13 +26,15 @@
         <strong>Rating:</strong> 
         <ul class="list-inline rating-list" >
             {{#each rates}}
-           <li> 
+           <li style="float: left;"> 
                 <a href="/submit-rating/{{this.rate}}/{{this.eventId}}" >
-                {{#if this.rid }}
-                <i class="fa fa-star selected"></i>
-                 {{else}} 
-                 <i class="fa fa-star"></i>
-                 {{/if}}</a>
+                {{#if this.rid}}
+    <i class="fa fa-star selected"></i>
+{{else}}
+    <i class="fa fa-star"></i>
+{{/if}}
+
+                 </a>
             </li> 
          {{/each}}
             
