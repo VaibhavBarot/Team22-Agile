@@ -1,4 +1,5 @@
 <main>
+
    <div class="row">
       <div class="col-md-5">
          <br>
@@ -22,24 +23,7 @@
     <div id="description">
         <strong>Description:</strong> {{description}}
     </div>
-    <div id="rating">
-        <strong>Rating:</strong> 
-        <ul class="list-inline rating-list" >
-            {{#each rates}}
-           <li style="float: left;"> 
-                <a href="/submit-rating/{{this.rate}}/{{this.eventId}}" >
-                {{#if this.rid}}
-    <i class="fa fa-star selected"></i>
-{{else}}
-    <i class="fa fa-star"></i>
-{{/if}}
-
-                 </a>
-            </li> 
-         {{/each}}
-            
-      </ul>
-        </div>
+    
     
     <input type="submit" class="btnq" value="Register for event">
    </form>

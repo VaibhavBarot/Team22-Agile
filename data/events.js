@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongodb');
-const {events,reviews} = require('../config/mongocollections');
+const {events,reviews, ratings} = require('../config/mongocollections');
 const session = require('express-session');
 
 
@@ -94,6 +94,21 @@ const getreviewsbyId = async(id) => {
   return eventReviews;
 };
 
+const getRatingById = async(id) => {
+
+  if (!id) throw 'You must provide an id to search for';
+  if (typeof id !== 'string') throw 'Id must be a string';
+  if (id.trim().length === 0)
+    throw 'Id cannot be an empty string or just spaces';
+  const ratingCollection = await ratings();
+  let eventRatin = await ratingCollection.findOne({eventId: id});
+  if (eventRatin === null) {
+    eventRatin ="";
+  }
+
+  return eventRatin;
+};
+
 const getreviewbyId = async(id) => {
 
   if (!id) throw 'You must provide an id to search for';
@@ -106,6 +121,7 @@ const getreviewbyId = async(id) => {
 
   return eventReviews;
 };
+
 
 const deleteReviewbyId  = async(id) => {
   console.log('review id:.........'+id);
@@ -125,6 +141,7 @@ const deleteReviewbyId  = async(id) => {
     requestEvent,
     getreviewsbyId,
     getreviewbyId,
-    deleteReviewbyId
+    deleteReviewbyId,
+    getRatingById
     
 }

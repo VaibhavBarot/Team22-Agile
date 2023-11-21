@@ -250,7 +250,6 @@ const unregisterForEvent = async (eventId,emailId) => {
     }
     const reviewCollection = await reviews();
     //const insertInfo;
-    console.log('review id:....'+rId)
     if(rId){
       insertInfo = await reviewCollection.updateOne({"_id": new ObjectId(rId)}, {$set: {"title":title,"description":description}});
     } else {
@@ -272,7 +271,7 @@ const unregisterForEvent = async (eventId,emailId) => {
     rid = rid.trim();
     from = from.trim();
     eventId = eventId.trim();
-    console.log(rid);
+  
 
     let subRate ={
       eventId:eventId,
