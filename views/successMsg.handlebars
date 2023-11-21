@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Success Page</title>
+  <style>
+   
+
+    h1 {
+      text-align: center;
+    }
+
+    .success-card {
+      background-color: #4CAF50;
+      color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    button {
+      background-color: #45a049;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      margin-top: 20px;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #4CAF50;
+    }
+  </style>
+</head>
+<body>
+  <h1>Success!</h1>
+  <div class="success-card">
+    <p>{{successMessage}}</p>
+    <div>
+      <button onclick="window.location.href='/'">Go Back to Home</button>
+      <button onclick="window.location.href='/allevents/api/report'">Go to Reports</button>
+    </div>
+  </div>
+
+  <!-- Add any additional content or scripts if needed -->
+</body>
+</html>

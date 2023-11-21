@@ -54,6 +54,44 @@ router
        console.log(e)
     }
   })
+
+  router
+  .route('/api/report')
+  .get(async (req, res) => {
+    try {
+      // You can add any logic needed for handling the GET request
+      // console.log("Report GET fIRED");
+      res.render('reportForm');
+    } catch (error) {
+      // console.error(error);
+      res.status(500).render('errorPage', { error: 'Internal Server Error' });
+    }
+  })
+  .post(async (req, res) => {
+    try {
+        // console.log("Report Post method Fired");
+      // Assuming you have a function to handle report creation in your data file
+      const { reportedEmailId, comment } = req.body;
+
+      // Validate form data if needed
+
+      // Use xss to sanitize input if necessary
+      const sanitizedReportedEmailId = xss(reportedEmailId);
+      const sanitizedComment = xss(comment);
+      const sanitizedReporterEmailID = req.session.user.emailId
+
+      // Call your createReport function or equivalent
+      const result = await eventData.createReport(sanitizedReporterEmailID, sanitizedReportedEmailId, sanitizedComment)
+
+      // Handle the result from the data file, you can customize this based on your needs
+      res.status(200).render('successMsg', { successMessage: 'Report submitted successfully!' });
+
+    } catch (error) {
+      // console.error(error);
+      res.status(500).render('errorMsg', { errorMessage: 'Error submitting report. Please try again.' });
+
+    }
+  });
   
 
 module.exports = router
