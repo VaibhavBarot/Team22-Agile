@@ -93,7 +93,7 @@ router.route('/create-event')
           let name = xss(req.body.name);
           let email = xss(req.body.emailIdInput)
           let time = xss(req.body.time)
-          let venue = xss(req.body.venue)
+          let venue = xss(req.body.address)
           let description = xss(req.body.description)
           let host = xss(req.body.host)
           await index.events.createEvent(name, email, date, time, venue, host, description);
@@ -201,5 +201,25 @@ router.route('/read-messages')
     }
 })
 
+router.route('/filterEvents')
+.get(async (req,res) => {
+    let allevents = await index.events.getAllEvents();
+    const lat = req.query.lat;
+    const lng = req.query.lng;
+    const miles= req.query.distance
+    const events = [];
+    for(const event of allevents){
+        if(event.venue){
+           let res =  await fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?destinations=${event.venue}&origins=${lat},${lng}&units=imperial&key=`)
+            res = await res.json();
+            const dist = res?.rows[0].elements[0].distance?.text;
+            if(dist && dist.includes('mi')){
+               if(parseFloat(dist.replace('mi','').trim()) < miles) events.push(event);
+            }
+        }
+
+    }
+    return res.render('upcoming_events',{title:'LearnLocally', head:'LearnLocally',events:events});
+})
 
 module.exports = router;
