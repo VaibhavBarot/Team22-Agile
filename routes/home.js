@@ -107,6 +107,7 @@ router.route('/create-event')
 .route('/allevents/request-event')
 .get(async (req, res) => {
   if(req.session.user){
+ 
       return res.render('request_event',{title:'LearnLocally', head:'LearnLocally'});
   }else{
       return res.redirect('/sign-in');
@@ -116,6 +117,7 @@ router.route('/create-event')
 
 .post(async (req, res) => {
   try {
+    
       let emailId = xss(req.body.emailIdInput);
       let description = xss(req.body.description)
       await index.events.requestEvent(emailId, description);
@@ -123,15 +125,6 @@ router.route('/create-event')
   }catch(e) {
      console.log(e)
   }
-})
-
-router
-.route('/registeredevents')
-.get(async (req, res) => {
-  if(req.session.user){
-    const events = await index.users.registeredEvents(req.session.user.emailId);
-    return res.render('registered_events',{events:events});
-  }  
 })
 
 router
@@ -151,9 +144,19 @@ router
         } catch (e) {
             res.status(404).render('errorPage', {error:e});
         }
-        
+
 
 })
+
+router
+.route('/registeredevents')
+.get(async (req, res) => {
+  if(req.session.user){
+    const events = await index.users.registeredEvents(req.session.user.emailId);
+    return res.render('registered_events',{events:events});
+  }  
+})
+
 router
 .route('/unregister')
 .post(async (req, res) => {
@@ -222,4 +225,63 @@ router.route('/filterEvents')
     return res.render('upcoming_events',{title:'LearnLocally', head:'LearnLocally',events:events});
 })
 
+router.route('/submit-review/:id')
+  .get(async (req,res) => {
+      let eventId= req.params.id;
+      
+      res.render('./submitReview',{eventId:eventId} )
+  })
+  .post(async (req,res) => {
+      try{
+            let title = xss(req.body.title);
+           let description = xss(req.body.description)
+           let eventId = xss(req.params.id);
+           let rId = xss(req.body.rId);
+           
+          await index.users.submitReview(req.session.user.emailId,title,description,eventId,rId);
+          //return res.redirect('./allevents/'+eventId)
+          res.redirect('/allevents/'+eventId);
+          //return res.status(200).render('./allevents/'+eventId, {message: 'Review submitted successfully.'})
+      }catch(e) {
+          return res.status(404).render('./submitReview', {title: "Message", error: e})
+      }
+  })
+
+  router.route('/submit-rating/:rid/:id')
+  .get(async (req,res) => {
+      let rateId= req.params.rid
+      let eventId= req.params.id;
+      await index.users.submitRating(req.session.user.emailId,rateId,eventId);
+      
+      res.redirect('/allevents/'+eventId);
+  })
+
+  router.route('/edit-review/:id/:eventId')
+  .get(async (req,res) => {
+      
+      let rId= req.params.id;
+      let eventId= req.params.eventId;
+    
+      //await index.users.submitRating(req.session.user.emailId,rateId,eventId);
+      let revDetails = await index.events.getreviewbyId(req.params.id);
+      //res.redirect('/submit-review/'+eventId+'/1' )
+      res.render('./submitReview',{eventId:eventId,rId:rId,title:revDetails.title,desc:revDetails.description} )
+      
+  })
+
+  router.route('/delete-review/:id/:eventId')
+  .get(async (req,res) => {
+      
+      let eventId= req.params.eventId;
+      let rId = req.params.id;
+      console.log(eventId);
+      //await index.users.submitRating(req.session.user.emailId,rateId,eventId);
+       let revDetails = await index.events.deleteReviewbyId(rId);
+        
+      //res.redirect('/submit-review/'+eventId+'/1' )
+     res.redirect('/allevents/'+eventId);
+      
+  })
+  
+      
 module.exports = router;

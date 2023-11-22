@@ -1,5 +1,6 @@
 const { ObjectId } = require('mongodb');
-const {events} = require('../config/mongocollections');
+const {events,reviews, ratings,reports} = require('../config/mongocollections');
+const session = require('express-session');
 
 
 const createEvent = async (name, email, date, time, venue, host, description) => {
@@ -58,6 +59,8 @@ const getAllEvents = async () => {
   eventList.forEach(element => {
     element._id=element._id.toString();
   });
+
+  
   return eventList;
 };
 
@@ -65,7 +68,7 @@ const getAllHostedEvents = async (email) => {
   const eventCollection = await events();
   const eventList = await eventCollection.find({email:email}).toArray();
 
-  
+
   if (!getAllHostedEvents) throw 'Could not get hosted events';
   eventList.forEach(element => {
     element._id=element._id.toString();
@@ -74,13 +77,14 @@ const getAllHostedEvents = async (email) => {
 };
 
 const getEventbyId = async(id) => {
+
   if (!id) throw 'You must provide an id to search for';
   if (typeof id !== 'string') throw 'Id must be a string';
   if (id.trim().length === 0)
     throw 'Id cannot be an empty string or just spaces';
   id = id.trim();
   if (!ObjectId.isValid(id)) throw 'invalid object ID';
-  
+
   const eventCollection = await events();
   const event = await eventCollection.findOne({_id: new ObjectId(id)});
   if (event === null) throw 'No event with that id';
@@ -89,12 +93,98 @@ const getEventbyId = async(id) => {
 };
 
 
+const createReport = async(reporterEmailID, reportedEmailId, comment) => {
+  const reportCollection = await reports();
+  try {
+    // console.log("Information about the report");
+    // console.log(reporterEmailID);
+    // console.log(reportedEmailId);
+    // console.log(comment);
+
+    
+    //return "Done from event data file"
+    let reportObj ={
+      _id: new ObjectId(),
+      reporterEmailID: reporterEmailID,
+      reportedEmailId: reportedEmailId,
+      comment: comment
+    }
+
+    // console.log("reporter obj");
+    // console.log(reportObj);
+    const report = await reportCollection.insertOne(reportObj)
+    if (!report.acknowledged || !report.insertedId){
+      throw 'Error : Could not add report';
+    }
+    return reportObj
+  } catch (error) {
+    return error;
+  }
+}
+
+const getreviewsbyId = async(id) => {
+
+  if (!id) throw 'You must provide an id to search for';
+  if (typeof id !== 'string') throw 'Id must be a string';
+  if (id.trim().length === 0)
+    throw 'Id cannot be an empty string or just spaces';
+  const reviewCollection = await reviews();
+  const eventReviews = await reviewCollection.find({eventId: id}).toArray();
+  if (eventReviews === null) throw 'No Reviews with that id';
+
+  return eventReviews;
+};
+
+const getRatingById = async(id) => {
+
+  if (!id) throw 'You must provide an id to search for';
+  if (typeof id !== 'string') throw 'Id must be a string';
+  if (id.trim().length === 0)
+    throw 'Id cannot be an empty string or just spaces';
+  const ratingCollection = await ratings();
+  let eventRatin = await ratingCollection.findOne({eventId: id});
+  if (eventRatin === null) {
+    eventRatin ="";
+  }
+
+  return eventRatin;
+};
+
+const getreviewbyId = async(id) => {
+
+  if (!id) throw 'You must provide an id to search for';
+  if (typeof id !== 'string') throw 'Id must be a string';
+  if (id.trim().length === 0)
+    throw 'Id cannot be an empty string or just spaces';
+  const reviewCollection = await reviews();
+  const eventReviews = await reviewCollection.findOne({_id: new ObjectId(id)});
+  if (eventReviews === null) throw 'No Reviews with that id';
+
+  return eventReviews;
+};
+
+
+const deleteReviewbyId  = async(id) => {
+  console.log('review id:.........'+id);
+  const reviewCollection = await reviews();
+  try {
+     const eventReviews = await reviewCollection.deleteOne({"_id": new ObjectId(id)});
+ } catch (e) {
+    print(e);
+ }
+  
+};
 
   module.exports={
     createEvent,
     getAllEvents,
     getEventbyId,
     requestEvent,
-    getAllHostedEvents
+    getAllHostedEvents,
+    getreviewsbyId,
+    getreviewbyId,
+    deleteReviewbyId,
+    getRatingById,
+    createReport
     
 }
