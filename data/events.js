@@ -19,8 +19,7 @@ const createEvent = async (name, email, date, time, venue, host, description) =>
       time:time,
       venue:venue,
       host:host,
-      description:description,
-      rating:rating
+      description:description
     }
 
     const insertInfo = await eventCollection.insertOne(newEvent);
