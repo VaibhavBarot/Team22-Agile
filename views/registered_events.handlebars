@@ -5,13 +5,10 @@
         margin: 0;
         padding: 0;
     }
-
     .events-container {
         width: 60%;
         margin: 0 auto;
-
     }
-
     .events {
         padding: 20px;
         margin: 8px 0;
@@ -19,21 +16,14 @@
         text-align: left;
         font-size: 1.2em;
         background-color: #ffcccb;
-
     }
-
-
     .events:nth-of-type(odd) {
         background-color: #ffcccb;
-
     }
-
     .events:nth-of-type(even) {
         background-color: #90ee90;
-
     }
-
-    .btn-unregister {
+    #unregister {
         background-color: #116638;
         color: white;
         padding: 10px 20px;
@@ -41,23 +31,26 @@
         border: none;
         cursor: pointer;
         font-size: 1.2em;
-        width: 100%;
-
     }
-
-    .btn-unregister:hover {
+    #unregister:hover {
         opacity: 0.8;
     }
+    #unregister {
+      background-color: #116638;
+      padding: 5px;
+      color: white;
+      margin-top: 20px;
+    }
 </style>
-<div class="events-container">
-    <h2>Events and Workshops you have registered for:</h2>
-    {{#each events}}
-    <div class="events">
-        {{this.name}}
-    </div>
-    <form method="POST" action="/unregister">
-        <input type="hidden" name="eventId" value="{{this._id}}">
-        <input type="submit" class="btn-unregister" value="Unregister">
-    </form>
-    {{/each}}
+<div>
+    Events and Workshops you have registered for:
 </div>
+{{#each events}}
+<div class="events">
+    {{this.name}}
+</div>
+<form method="POST" action="/unregister">
+    <input type="hidden" name="eventId" value={{this._id}}>
+    <input type="submit" id="unregister" value="Unregister">
+</form>
+{{/each}}

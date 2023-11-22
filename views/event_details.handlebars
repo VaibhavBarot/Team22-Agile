@@ -31,35 +31,59 @@
         margin-bottom: 10px;
     }
 </style>
-
 <main>
-    <div class="row">
-        <div class="col-md-5 event-card" style="background-color: {{color}};">
-            <br>
-            <h2 id="heading">{{name}}</h2>
-            <form method="POST" id="eventdetails-form" action="?">
-                <div id="name">
-                    <strong>Name:</strong> {{name}}
-                </div>
-                <div id="date">
-                    <strong>Date:</strong> {{date}}
-                </div>
-                <div id="time">
-                    <strong>Time:</strong> {{time}}
-                </div>
-                <div id="venue">
-                    <strong>Venue:</strong> {{venue}}
-                </div>
-                <div id="host">
-                    <strong>Host:</strong> {{host}}
-                </div>
-                <div id="description">
-                    <strong>Description:</strong> {{description}}
-                </div>
 
-                <input type="submit" class="btnq" value="Register for event">
-            </form>
-            <br>
-        </div>
+   <div class="row">
+      <div class="col-md-5 event-card" style="background-color: {{color}};">
+         <br>
+         <h2 id="heading">Event Details</h2>
+         <form method="POST" id="eventdetails-form" action="?">
+    <div id="name">
+        <strong>Name:</strong> {{name}}
     </div>
+    <div id="date">
+        <strong>Date:</strong> {{date}}
+    </div>
+    <div id="time">
+        <strong>Time:</strong> {{time}}
+    </div>
+    <div id="venue">
+        <strong>Venue:</strong> {{venue}}
+    </div>
+    <div id="host">
+        <strong>Host:</strong> {{host}}
+    </div>
+    <div id="description">
+        <strong>Description:</strong> {{description}}
+    </div>
+    
+    
+    <input type="submit" class="btnq" value="Register for event">
+   </form>
+ 
+   <a href="/submit-review/{{eventId}}">
+   <input type="submit" class="btnq" value="Submit Review">
+   <br></a>
+
+    
+</div>
+<div class="col-md-5">
+     <h2 id="heading">User Reviews</h2>
+     {{#each reviews}}
+<div class="events">
+    {{this.title}} 
+</div>
+    <div class="events">
+    {{this.description}} 
+</div>  
+ <div class="events">
+    <a href="/edit-review/{{this._id}}/{{this.eventId}}">Edit</a>
+    <a href="/delete-review/{{this._id}}/{{this.eventId}}">Delete</a>
+</div>  
+
+    
+
+{{/each}}
+</div>
+</div>
 </main>
