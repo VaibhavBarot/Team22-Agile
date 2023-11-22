@@ -128,6 +128,27 @@ router.route('/create-event')
 })
 
 router
+.route('/hostedevents')
+.get(async (req, res) => {
+    try {
+        if (!req.session.user) {
+            return res.redirect('/sign-in');
+        }
+        // if(!allevents){
+        //     throw 'No Events'
+        // }
+        else{
+            let allevents = await index.events.getAllHostedEvents(req.session.user.emailId);
+            return res.status(200).render('hosted_events',{title:'LearnLocally', head:'LearnLocally',events:allevents});
+        }
+        } catch (e) {
+            res.status(404).render('errorPage', {error:e});
+        }
+
+
+})
+
+router
 .route('/registeredevents')
 .get(async (req, res) => {
   if(req.session.user){
