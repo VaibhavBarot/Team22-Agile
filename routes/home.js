@@ -37,7 +37,7 @@ router.route('/sign-in')
         password = password.trim();
 
         let user = await index.users.login(emailId, password);
-        req.session.user = {emailId: emailId, firstName:user.firstName, lastName:user.lastName};
+        req.session.user = {emailId: emailId, firstName:user.firstName, lastName:user.lastName, city:user.city};
         const messages = await index.users.retrieveMessages(req.session.user.emailId);
         let unreadMessage = (messages?.length) ? true:false;
         res.locals.messages = unreadMessage;
@@ -63,7 +63,8 @@ router.route('/sign-up')
         let password = xss(req.body.passwordInput);
         let firstName = xss(req.body.firstName);
         let lastName = xss(req.body.lastName);
-        await index.users.createUser(emailId, password, firstName, lastName);
+        let city = xss(req.body.city);
+        await index.users.createUser(emailId, password, firstName, lastName, city);
         res.redirect('/sign-in');
     }catch(e) {
         res.status(404).render('./sign_up', {title: "Sign-up Form", error: e})

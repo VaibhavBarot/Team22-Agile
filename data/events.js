@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongodb');
-const {events,reviews, ratings} = require('../config/mongocollections');
+const {events,reviews, ratings,reports} = require('../config/mongocollections');
 const session = require('express-session');
 
 
@@ -81,6 +81,36 @@ const getEventbyId = async(id) => {
   return event;
 };
 
+
+const createReport = async(reporterEmailID, reportedEmailId, comment) => {
+  const reportCollection = await reports();
+  try {
+    // console.log("Information about the report");
+    // console.log(reporterEmailID);
+    // console.log(reportedEmailId);
+    // console.log(comment);
+
+    
+    //return "Done from event data file"
+    let reportObj ={
+      _id: new ObjectId(),
+      reporterEmailID: reporterEmailID,
+      reportedEmailId: reportedEmailId,
+      comment: comment
+    }
+
+    // console.log("reporter obj");
+    // console.log(reportObj);
+    const report = await reportCollection.insertOne(reportObj)
+    if (!report.acknowledged || !report.insertedId){
+      throw 'Error : Could not add report';
+    }
+    return reportObj
+  } catch (error) {
+    return error;
+  }
+}
+
 const getreviewsbyId = async(id) => {
 
   if (!id) throw 'You must provide an id to search for';
@@ -142,6 +172,7 @@ const deleteReviewbyId  = async(id) => {
     getreviewsbyId,
     getreviewbyId,
     deleteReviewbyId,
-    getRatingById
+    getRatingById,
+    createReport
     
 }
