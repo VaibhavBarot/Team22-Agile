@@ -91,12 +91,13 @@ router.route('/create-event')
       try {
           let date = xss(req.body.date);
           let name = xss(req.body.name);
-          let email = xss(req.body.emailIdInput)
+          let email = xss(req.session.user.emailId)
           let time = xss(req.body.time)
           let venue = xss(req.body.address)
           let description = xss(req.body.description)
           let host = xss(req.body.host)
-          await index.events.createEvent(name, email, date, time, venue, host, description);
+          let price = xss(req.body.price)
+          await index.events.createEvent(name, email, date, time, venue, host, description,price);
           res.redirect('/create-event');
       }catch(e) {
          console.log(e)
@@ -207,20 +208,32 @@ router.route('/read-messages')
 router.route('/filterEvents')
 .get(async (req,res) => {
     let allevents = await index.events.getAllEvents();
-    const lat = req.query.lat;
-    const lng = req.query.lng;
-    const miles= req.query.distance
+    const miles= req.query.distance;
+    const keyword = req.query.keyword;
+    const price = req.query.price;
     const events = [];
     for(const event of allevents){
-        if(event.venue){
-           let res =  await fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?destinations=${event.venue}&origins=${lat},${lng}&units=imperial&key=`)
-            res = await res.json();
-            const dist = res?.rows[0].elements[0].distance?.text;
-            if(dist && dist.includes('mi')){
-               if(parseFloat(dist.replace('mi','').trim()) < miles) events.push(event);
-            }
+        let addEvent = true;
+        if(miles){
+            if(event.venue){
+                const lat = req.query.lat;
+                const lng = req.query.lng;
+                let res =  await fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?destinations=${event.venue}&origins=${lat},${lng}&units=imperial&key=`)
+                res = await res.json();
+                const dist = res?.rows[0].elements[0].distance?.text;
+                    if(dist && dist.includes('mi')){
+                        addEvent = (parseFloat(dist.replace('mi','').trim()) < miles) ? true:false;
+                 }
+             }
+        }
+        if(keyword){
+            addEvent = addEvent && (event.name.toLowerCase().includes(keyword.toLowerCase())) ? true:false;
+        }
+        if(price){
+            addEvent = addEvent && (event.price <= price) ? true:false;
         }
 
+        if(addEvent) events.push(event);
     }
     return res.render('upcoming_events',{title:'LearnLocally', head:'LearnLocally',events:events});
 })
