@@ -14,6 +14,7 @@
     #error {
         width: 100%;
         background-color: red;
+        text-align: center;
     }
 
     #search{
@@ -90,6 +91,10 @@
         width: 50%;
         font-size: 1.2em;
     }
+
+    #loader{
+        display: none;
+    }
 </style>
 
 <body>
@@ -99,9 +104,18 @@
             <input id="miles" type="number" name="distance" class="form-control-sm">
             <label for="distance" class="">Miles</label>
         </div>
-        <button id="search" class="btn-primary btn-lg">Search</button>
+        <div class="controls">
+            <input id="event-name" type="text" name="event-name" class="form-control-md" placeholder="Filter by name">
+        </div>
+        <div class="controls">
+            <label for="price" class="">Upto</label>
+            <input id="price" type="number" name="price" class="form-control-sm"> $
+        </div>
+        <button id="search" class="btn btn-primary btn-lg">Search</button>
+        <div id="loader">
+            <div class="spinner-border"></div>
+        </div>
     </div>
-
     <div id="error"></div>
     </div>
     <br>
@@ -132,6 +146,7 @@
 </body>
 <script>
     document.getElementById('search').addEventListener('click', () => {
+        document.getElementById('loader').style.display = 'block';
         navigator.geolocation.getCurrentPosition(displayLocation, showError);
     })
 
@@ -142,12 +157,31 @@
 
         const latlng = { lat, lng }
         const miles = document.getElementById('miles').value;
-        fetch(`http://localhost:3000/filterEvents?lat=${lat}&lng=${lng}&distance=${miles}`)
+        const keyword = document.getElementById('event-name').value
+        const price = document.getElementById('price').value
+        let url = 'http://localhost:3000/filterEvents?'
+        if(lat && lng){
+            url+=`lat=${lat}&lng=${lng}&distance=${miles}`;
+        }
+        if(keyword){
+            url+=`&keyword=${keyword}`;
+        }
+        if(price){
+            url+=`&price=${price}`;
+        }
+        fetch(url)
             .then(res => res.text())
             .then((html) => {
                 var parser = new DOMParser();
                 var doc = parser.parseFromString(html, "text/html");
-                document.getElementById('events-group').innerHTML = doc.getElementById('events-group').innerHTML;
+                
+                if(doc.getElementById('events-group').innerHTML.trim() !==""){
+                    document.getElementById('events-group').innerHTML = doc.getElementById('events-group').innerHTML;
+                }else{
+                    document.getElementById('error').innerHTML = 'No events found! please update filters';
+                    document.getElementById('events-group').innerHTML = '';
+                }
+                document.getElementById('loader').style.display = 'none';
             })
     }
 

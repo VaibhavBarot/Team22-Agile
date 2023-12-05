@@ -3,7 +3,7 @@ const {events,reviews, ratings,reports} = require('../config/mongocollections');
 const session = require('express-session');
 
 
-const createEvent = async (name, email, date, time, venue, host, description) => {
+const createEvent = async (name, email, date, time, venue, host, description,price) => {
 
     name = name.trim();
     venue = venue.trim()
@@ -19,7 +19,8 @@ const createEvent = async (name, email, date, time, venue, host, description) =>
       time:time,
       venue:venue,
       host:host,
-      description:description
+      description:description,
+      price:price
     }
 
     const insertInfo = await eventCollection.insertOne(newEvent);
