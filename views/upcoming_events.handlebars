@@ -1,18 +1,172 @@
+<style>
+    #filter {
+        height: 64px;
+        width: 80%;
+        margin: 5%;
+        border: black solid;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 5px;
+    }
+
+    #error {
+        width: 100%;
+        background-color: red;
+    }
+
+    #search{
+        cursor: pointer;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+    }
+
+    .main-content {
+        width: 60%;
+        margin: 0 auto;
+        padding: 20px;
+        text-align: center;
+    }
+
+    h2 {
+        color: #333;
+    }
+
+    .events {
+        margin: 8px 0;
+        padding: 20px;
+        font-size: 1.2em;
+        border-radius: 5px;
+
+    }
+
+    #events-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .events:nth-of-type(4n+1) {
+        background-color: #ffcccb;
+
+    }
+
+    .events:nth-of-type(4n+2) {
+        background-color: #add8e6;
+
+    }
+
+    .events:nth-of-type(4n+3) {
+        background-color: #90ee90;
+
+    }
+
+    .events:nth-of-type(4n) {
+        background-color: #ffffe0;
+
+    }
+
+    .events a {
+        text-decoration: none;
+        color: #000;
+    }
+
+    .events a:hover {
+        text-decoration: underline;
+    }
+
+    #new-event {
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 20px 0;
+        border: none;
+        cursor: pointer;
+        width: 50%;
+        font-size: 1.2em;
+    }
+</style>
+
 <body>
+    <h2 style="text-align:center;">Upcoming Events and Workshops near you:</h2>
+    <div id="filter">
+        <div class="controls">
+            <input id="miles" type="number" name="distance" class="form-control-sm">
+            <label for="distance" class="">Miles</label>
+        </div>
+        <button id="search" class="btn-primary btn-lg">Search</button>
+    </div>
+
+    <div id="error"></div>
+    </div>
     <br>
-    <h2>Upcoming Events and Workshops near you:</h2>
-    {{#each events}}
-        <div class="events"><a href="/allevents/{{_id}}">{{name}}</a></div>
-    {{/each}}
+    <div class="main-content">
+        <div id="events-group" class="card-group">
+            {{#each events}}
+            <div class="card">
+                <img class="card-img-top"
+                    src="https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F625808009%2F287287194141%2F1%2Foriginal.20231022-013522?h=230&w=460&auto=format%2Ccompress&q=75&sharp=10&rect=0%2C6%2C952%2C476&s=4cb2709c342b786e80306e5de678fc47"
+                    alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">{{name}}</h5>
+                    <p class="card-text">{{description}}</p>
+                    <p class="card-text">{{time}} | {{date}}</p>
+                    <p class="card-text">{{venue}}</p>
+                    <a href="/allevents/{{_id}}" class="btn btn-primary btn-lg">Details</a>
+                </div>
+            {{/each}}
+            </div>
+            <br>
+            <br>
+            <br>
 
-    <br>
-    <br>
-    <br>
-
-    <form action = "/allevents/request-event">
-    <button type = "submit">Click here to request for an event!</button>
-    </form>
-
-
-
+            <form action="/allevents/request-event">
+                <button id="new-event" type="submit">Click here to request for an event!</button>
+            </form>
+        </div>
 </body>
+<script>
+    document.getElementById('search').addEventListener('click', () => {
+        navigator.geolocation.getCurrentPosition(displayLocation, showError);
+    })
+
+    displayLocation = (position) => {
+        document.getElementById('error').innerHTML = '';
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
+        const latlng = { lat, lng }
+        const miles = document.getElementById('miles').value;
+        fetch(`http://localhost:3000/filterEvents?lat=${lat}&lng=${lng}&distance=${miles}`)
+            .then(res => res.text())
+            .then((html) => {
+                var parser = new DOMParser();
+                var doc = parser.parseFromString(html, "text/html");
+                document.getElementById('events-group').innerHTML = doc.getElementById('events-group').innerHTML;
+            })
+    }
+
+    showError = (error) => {
+        let msg;
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                msg = "You denied the request for your location."
+                break;
+            case error.POSITION_UNAVAILABLE:
+                msg = "Your Location information is unavailable."
+                break;
+            case error.TIMEOUT:
+                msg = "Your request timed out. Please try again"
+                break;
+            case error.UNKNOWN_ERROR:
+                msg = "An unknown error occurred please try again after some time."
+                break;
+        }
+        document.getElementById('error').innerHTML = msg;
+    }
+</script>
