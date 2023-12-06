@@ -3,6 +3,8 @@ const router = express.Router();
 const eventData = require('../data/events');
 const index = require('../data/index');
 const xss = require('xss');
+const { reviews } = require('../config/mongocollections');
+
 
 router
 .route('/')
@@ -33,8 +35,15 @@ router
             return res.redirect('/sign-in');
         }
         else {
+                    
+            let eventReviews = await index.events.getreviewsbyId(req.params.id);
+           
             let details = await index.events.getEventbyId(req.params.id);
-            return res.render('event_details',{title:'LearnLocally', head:'LearnLocally',name:details.name, date:details.date, time:details.time, venue: details.venue, host: details.host, description: details.description});
+
+            let rating =await index.events.getRatingById(req.params.id)
+            let ratings =  [{rate:1,eventId:req.params.id,rid:rating.rid},{rate:2,eventId:req.params.id,rid:rating.rid},{rate:3,eventId:req.params.id,rid:rating.rid},{rate:4,eventId:req.params.id,rid:rating.rid},{rate:5,eventId:req.params.id,rid:rating.rid}]
+            req.session.eventId= details;
+            return res.render('event_details',{title:'LearnLocally', head:'LearnLocally',name:details.name, date:details.date, time:details.time, venue: details.venue, host: details.host, description: details.description,eventId: details._id, reviews: eventReviews,rates:ratings, price:details.price});
         }
     } catch (e) {
         return res.status(404).render('errorPage',{error:e});
@@ -71,17 +80,21 @@ router
     try {
         // console.log("Report Post method Fired");
       // Assuming you have a function to handle report creation in your data file
-      const { reportedEmailId, comment } = req.body;
-
+      const {EmailId, comment } = req.body;
+      let validEmailRegex = /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/
+      if (!EmailId.match(validEmailRegex)){
+        // return res.status(500).render('errorPage', { error: 'Invalid EmailId' });
+        res.status(500).render('errorMsg', { errorMessage: 'Invalid EmailId. Please try again.' });
+      }
       // Validate form data if needed
 
       // Use xss to sanitize input if necessary
-      const sanitizedReportedEmailId = xss(reportedEmailId);
+      const sanitizedEmailId = xss(EmailId);
       const sanitizedComment = xss(comment);
       const sanitizedReporterEmailID = req.session.user.emailId
 
       // Call your createReport function or equivalent
-      const result = await eventData.createReport(sanitizedReporterEmailID, sanitizedReportedEmailId, sanitizedComment)
+      const result = await eventData.createReport(sanitizedReporterEmailID, sanitizedEmailId, sanitizedComment)
 
       // Handle the result from the data file, you can customize this based on your needs
       res.status(200).render('successMsg', { successMessage: 'Report submitted successfully!' });
@@ -93,5 +106,5 @@ router
     }
   });
   
-
+  
 module.exports = router
