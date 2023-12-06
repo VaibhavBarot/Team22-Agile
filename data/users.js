@@ -86,10 +86,10 @@ const login = async (emailId, password) => {
 
 };
 
-const registerForEvent = async (emailid, event) => {
-  emailid = emailid.trim();
+const registerForEvent = async (id, emailId, event) => {
+  emailId = emailId.trim();
   const userCollection = await users();
-  const updateInfo = await userCollection.updateOne({emailId:emailid}, {$addToSet: {RegisteredEvents : event}});
+  const updateInfo = await userCollection.updateOne({emailId:emailId}, {$addToSet: {RegisteredEvents : event}});
 
 
   if (updateInfo.modifiedCount === 0){
@@ -118,12 +118,12 @@ const registeredEvents = async (emailid) => {
 };
 
 const unregisterForEvent = async (eventId,emailId) => {
-  emailid = emailId.trim();
-  eventid = eventId.trim();
+  emailId = emailId.trim();
+  eventId = eventId.trim();
 
   const userCollection = await users();
 
-  const updateInfo = await userCollection.updateOne({emailId:emailid}, {$pull: {RegisteredEvents : {_id:eventid}}});
+  const updateInfo = await userCollection.updateOne({emailId:emailId}, {$pull: {RegisteredEvents : {_id:eventId}}});
 
 
   if (updateInfo.modifiedCount === 0){
