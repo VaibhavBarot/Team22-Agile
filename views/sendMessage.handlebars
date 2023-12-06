@@ -1,29 +1,119 @@
-<main>
+{{!-- <main>
    <div class="row">
       <div class="col-md-12">
          <br>
          <h2>Messaging</h2>
          <form method="POST" id="postmessage-form" action="/send-message">
 
-          <div class="row mb-2">
-         <label for="name" class="col-sm-2 col-form-label">Email : </label>
-         <div class="col-sm-6">
-            <input type="text" size = "25" class="input" id="name" name="email" placeholder="Enter user email">
-         </div>
-         <div id="no-title" class="div-text"  hidden>Enter email address</div>
-      </div>
+            <div class="row mb-2">
+               <label for="name" class="col-sm-2 col-form-label">Email : </label>
+               <div class="col-sm-6">
+                  <input type="text" size="25" class="input" id="name" name="email" placeholder="Enter user email">
+               </div>
+               <div id="no-title" class="div-text" hidden>Enter email address</div>
+            </div>
 
-      <div class="row md-12">
-         <label for="description" class="col-sm-2 col-form-label">Description : </label>
-         <div class="col-sm-12">
-            <textarea class="input" cols="100" rows="5" id="description" name="description"></textarea>
-         </div>
-      </div>    
+            <div class="row md-12">
+               <label for="description" class="col-sm-2 col-form-label">Description : </label>
+               <div class="col-sm-12">
+                  <textarea class="input" cols="100" rows="5" id="description" name="description"></textarea>
+               </div>
+            </div>
 
-      <br>
-      <input type="submit" class="btnq" value="Send">
-   </form>
-   <br>
+            <br>
+            <input type="submit" class="btnq" value="Send">
+         </form>
+         <br>
       </div>
-</div>
+   </div>
+</main> --}}
+
+<style>
+   body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+   }
+
+   main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 50px 0;
+
+   }
+
+   .row {
+      margin: 0;
+      width: 100%;
+   }
+
+   h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+   }
+
+   .col-md-12 {
+      max-width: 600px;
+      background-color: #ffffff;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      margin: auto;
+
+   }
+
+   label {
+      display: block;
+      margin-bottom: 5px;
+      color: #666;
+   }
+
+   .input {
+      width: calc(100% - 20px);
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+   }
+
+   .btnq {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      background-color: #5cb85c;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+   }
+
+   .btnq:hover {
+      background-color: #4cae4c;
+
+   }
+</style>
+
+<main>
+   <div class="row">
+      <div class="col-md-12">
+         <h2>Messaging</h2>
+         <form method="POST" id="postmessage-form" action="/send-message">
+            <div class="row mb-2">
+               <label for="email">Email :</label>
+               <input type="email" class="input" id="email" name="email" placeholder="Enter user email" required>
+            </div>
+            <div class="row mb-2">
+               <label for="description">Description :</label>
+               <textarea class="input" id="description" name="description" rows="5" placeholder="Enter your message"
+                  required></textarea>
+            </div>
+            <input type="submit" class="btnq" value="Send">
+         </form>
+      </div>
+   </div>
 </main>
