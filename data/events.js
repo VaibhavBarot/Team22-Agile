@@ -27,7 +27,6 @@ const createEvent = async (name, email, date, time, venue, host, description,pri
       if (!insertInfo.acknowledged || !insertInfo.insertedId){
         throw 'Error : Could not add event';
       }
-
     return newEvent;
   };
 
@@ -35,8 +34,6 @@ const createEvent = async (name, email, date, time, venue, host, description,pri
 
     emailId = emailId.trim();
     description = description.trim()
-  
-
     const eventCollection = await events();
 
     let newEventRequest ={
@@ -97,13 +94,7 @@ const getEventbyId = async(id) => {
 const createReport = async(reporterEmailID, reportedEmailId, comment) => {
   const reportCollection = await reports();
   try {
-    // console.log("Information about the report");
-    // console.log(reporterEmailID);
-    // console.log(reportedEmailId);
-    // console.log(comment);
 
-    
-    //return "Done from event data file"
     let reportObj ={
       _id: new ObjectId(),
       reporterEmailID: reporterEmailID,
@@ -111,8 +102,6 @@ const createReport = async(reporterEmailID, reportedEmailId, comment) => {
       comment: comment
     }
 
-    // console.log("reporter obj");
-    // console.log(reportObj);
     const report = await reportCollection.insertOne(reportObj)
     if (!report.acknowledged || !report.insertedId){
       throw 'Error : Could not add report';
@@ -143,12 +132,12 @@ const getRatingById = async(id) => {
   if (id.trim().length === 0)
     throw 'Id cannot be an empty string or just spaces';
   const ratingCollection = await ratings();
-  let eventRatin = await ratingCollection.findOne({eventId: id});
-  if (eventRatin === null) {
-    eventRatin ="";
+  let eventRating = await ratingCollection.findOne({eventId: id});
+  if (eventRating === null) {
+    eventRating ="";
   }
 
-  return eventRatin;
+  return eventRating;
 };
 
 const getreviewbyId = async(id) => {

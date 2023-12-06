@@ -26,15 +26,12 @@ router
         if(!user){
             return res.redirect('/sign-in');
         }
-        // console.log('hdbsujns')
         const {bio} = req.body;
         const userbio=bio;
-        // console.log(userbio);
         const emailId=req.session.user.emailId;
         const userCollection = await users();
         const updateInfo=await userCollection.updateOne({ emailId: emailId }, { $set: { bio: userbio } });
         req.session.user.bio=userbio;
-        // console.log(updateInfo.modifiedCount)
         // Redirect back to the profile page
         res.redirect('/profile');
 

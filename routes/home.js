@@ -35,7 +35,6 @@ router.route('/sign-in')
 
         emailId = emailId.trim().toLowerCase();
         password = password.trim();
-
         let user = await index.users.login(emailId, password);
         req.session.user = {emailId: emailId, firstName:user.firstName, lastName:user.lastName, city:user.city};
         const messages = await index.users.retrieveMessages(req.session.user.emailId);
@@ -85,7 +84,6 @@ router.route('/create-event')
     }else{
         return res.redirect('/sign-in');
     }
-     
 })
   .post(async (req, res) => {
       try {
@@ -108,7 +106,6 @@ router.route('/create-event')
 .route('/allevents/request-event')
 .get(async (req, res) => {
   if(req.session.user){
- 
       return res.render('request_event',{title:'LearnLocally', head:'LearnLocally'});
   }else{
       return res.redirect('/sign-in');
@@ -118,7 +115,6 @@ router.route('/create-event')
 
 .post(async (req, res) => {
   try {
-    
       let emailId = xss(req.body.emailIdInput);
       let description = xss(req.body.description)
       await index.events.requestEvent(emailId, description);
@@ -273,11 +269,8 @@ router.route('/submit-review/:id')
   .get(async (req,res) => {
       
       let rId= req.params.id;
-      let eventId= req.params.eventId;
-    
-      //await index.users.submitRating(req.session.user.emailId,rateId,eventId);
+      let eventId= req.params.eventId;    
       let revDetails = await index.events.getreviewbyId(req.params.id);
-      //res.redirect('/submit-review/'+eventId+'/1' )
       res.render('./submitReview',{eventId:eventId,rId:rId,title:revDetails.title,desc:revDetails.description} )
       
   })
@@ -288,10 +281,8 @@ router.route('/submit-review/:id')
       let eventId= req.params.eventId;
       let rId = req.params.id;
       console.log(eventId);
-      //await index.users.submitRating(req.session.user.emailId,rateId,eventId);
        let revDetails = await index.events.deleteReviewbyId(rId);
         
-      //res.redirect('/submit-review/'+eventId+'/1' )
      res.redirect('/allevents/'+eventId);
       
   })
