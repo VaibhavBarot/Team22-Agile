@@ -31,6 +31,9 @@
         margin-bottom: 10px;
     }
 </style>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/add-to-calendar-button@2" async defer></script>
+</head>
 <main>
 
    <div class="row">
@@ -63,6 +66,16 @@
     
     <input type="submit" class="btnq" value="Register for event">
    </form>
+
+   <br>
+    <add-to-calendar-button
+name="Title"
+options="'Apple','Google'"
+location="World Wide Web"
+startDate="2023-11-19"
+endDate="2023-11-19"
+timeZone="America/Los_Angeles"
+    ></add-to-calendar-button>
  
    <a href="/submit-review/{{eventId}}">
    <input type="submit" class="btnq" value="Submit Review">
