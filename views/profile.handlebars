@@ -1,69 +1,174 @@
-{{!-- <!DOCTYPE html>
-<html lang="en"> --}}
-<head>
-  {{!-- <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Page Title</title> --}}
+<style>
+  {
+      {
+      !-- body {
+        background-color: #f8f8f8;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
 
-  <style>
-    .profile-picture-container {
-      width: 100px;
-      height: 100px;
-      overflow: hidden;
-      border-radius: 50%;
+      }
+
+      --
     }
+  }
 
-    .profile-picture {
+
+  main {
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  h1,
+  h2,
+  h4 {
+    color: #333;
+    text-align: center;
+  }
+
+  .profile-picture {
+    display: block;
+    margin: 0 auto;
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+  }
+
+  .input,
+  textarea.input {
+    width: calc(100% - 40px);
+    margin: 10px 0;
+    display: block;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fafafa;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .input:focus,
+  textarea.input:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.25);
+    outline: none;
+  }
+
+  .btnq {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    border: none;
+    transition: background-color 0.3s;
+    border-radius: 4px;
+    padding: 10px;
+    width: calc(100% - 40px);
+  }
+
+  .btnq:hover {
+    background-color: #367B35;
+  }
+
+  label {
+    display: block;
+    margin: 0.5rem 0;
+    color: #666;
+    font-weight: bold;
+  }
+
+  .input[type='file'] {
+    padding: 0.5rem;
+    background-color: #fafafa;
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+
+    .input,
+    .btnq,
+    label {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
+      margin: 10px 0;
     }
 
-    .avatar-circle {
-      width: 100px;
-      height: 100px;
-      background-color: #ddd;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 2em;
+    main {
+      padding: 10px;
     }
-  </style>
-</head>
+  }
+
+  .user-info {
+    background-color: #f1f1f1;
+    padding: 1rem;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+
+  .user-info p {
+    font-size: 1rem;
+    color: #555;
+    margin: 0.5rem 0;
+  }
+
+
+  .bio-section {
+    background-color: #e9ecef;
+    padding: 1rem;
+    border-radius: 5px;
+    width: 100%;
+  }
+</style>
+
+
 <body>
+  <main>
 
-{{#if user.profilePicture}}
-  <div class="profile-picture-container">
-    <img src="{{user.profilePicture}}" alt="{{user.firstName}}'s Profile Picture" class="profile-picture">
-  </div>
-{{else}}
-  <div class="avatar-circle">
-    <i class="fas fa-user fa-5x"></i>
-  </div>
-  <h2>Add Profile Picture</h2>
-  <form action="/profile/add-profile" method="post" enctype="multipart/form-data">
-    <label for="profilePicture">Profile Picture:</label>
-    <input type="file" id="profilePicture" name="profilePicture">
-    <button type="submit">Add Profile Picture</button>
-  </form>
-{{/if}}
+    {{#if user.profilePicture}}
+    <div class="profile-picture-container">
+      <img src="{{user.profilePicture}}" alt="{{user.firstName}}'s Profile Picture" class="profile-picture">
+    </div>
+    {{else}}
+    <div class="avatar-circle">
+      <i class="fas fa-user fa-5x"></i>
+    </div>
+    <p>Add Profile Picture</p>
+    <form action="/profile/add-profile" method="post" enctype="multipart/form-data">
+      <label for="profilePicture">Profile Picture:</label>
+      <input type="file" id="profilePicture" name="profilePicture">
+      <button type="submit">Add Profile Picture</button>
+    </form>
+    {{/if}}
 
-<h1>{{user.firstName}}'s Profile</h1>
-<p>Name: {{user.firstName}} {{user.lastName}}</p>
-<p>City: {{user.city}}</p>
+    <h4>{{user.firstName}}'s Profile</h4>
+    <p>Name: {{user.firstName}} {{user.lastName}}</p>
+    <p>City: {{user.city}}</p>
 
-{{#if user.bio}}
-  <p>Bio: {{user.bio}}</p>
-{{else}}
-  <h2>Add Bio</h2>
-  <form action="/profile/add-bio" method="post">
-    <label for="bio">Bio:</label>
-    <textarea id="bio" name="bio"></textarea>
-    <button type="submit">Add Bio</button>
-  </form>
-{{/if}}
+    {{#if user.bio}}
+    <p>Bio: {{user.bio}}</p>
+    {{else}}
+    <p>Add Bio</p>
+    <form action="/profile/add-bio" method="post">
+      <label for="bio">Bio:</label>
+      <textarea id="bio" name="bio"></textarea>
+      <button type="submit">Add Bio</button>
+    </form>
+    {{/if}}
+  </main>
 
 </body>
+
 </html>

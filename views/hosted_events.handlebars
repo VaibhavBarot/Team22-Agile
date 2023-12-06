@@ -1,17 +1,79 @@
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+    }
+
+    h2 {
+        text-align: center;
+        color: #333;
+        padding-top: 20px;
+    }
+
+    .events-container {
+        margin: 0 auto;
+        max-width: 600px;
+        overflow: auto;
+    }
+
+    .events {
+        padding: 20px;
+        margin: 8px 0;
+        border-radius: 5px;
+        border-left: 5px solid #4CAF50;
+        text-align: left;
+        font-size: 1.2em;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        background-color: #ffcccb;
+    }
+
+    .events:nth-of-type(odd) {
+        background-color: #ffcccb;
+    }
+
+    .events:nth-of-type(even) {
+        background-color: #90ee90;
+    }
+
+    .event-request {
+        text-align: center;
+        padding: 20px;
+    }
+
+    .hosted-event-button {
+        background-color: #116638;
+        color: white;
+        padding: 10px 20px;
+        margin-top: 10px;
+        border: none;
+        cursor: pointer;
+        font-size: 1em;
+        border-radius: 4px;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    .hosted-event-button:hover {
+        background-color: #0e5529;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
 <body>
-    <br>
-    <h2>Hosted Events :</h2>
-    {{#each events}}
-        <div class="events">{{this.name}} <br /> {{this.date}} <br /> {{this.time}} <br /> <br /></a></div>
-    {{/each}}
-
-
-
-   {{!--} <form action = "/allevents/request-event">
-    <button type = "submit">Click here to request for an event!</button>
-    </form>
-    --}}
-
-
-
+    <h2>Hosted Events:</h2>
+    <div class="events-container">
+        {{#each events}}
+        <div class="events">
+            <strong>{{this.name}}</strong>
+            <p>Date: {{this.date}}</p>
+            <p>Time: {{this.time}}</p>
+        </div>
+        {{/each}}
+        <div class="event-request">
+            <form action="/allevents/request-event">
+                <button type="submit" class="hosted-event-button">Click here to request for an event!</button>
+            </form>
+        </div>
+    </div>
 </body>

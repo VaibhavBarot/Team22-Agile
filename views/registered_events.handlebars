@@ -5,45 +5,69 @@
         margin: 0;
         padding: 0;
     }
+
+    h2 {
+        text-align: center;
+        color: #333;
+        padding-top: 30px;
+        margin-bottom: 20px;
+
+    }
+
     .events-container {
         width: 60%;
         margin: 0 auto;
+        padding-bottom: 20px;
+
     }
+
     .events {
         padding: 20px;
         margin: 8px 0;
-        border-left: 5px solid #ccc;
+        border-radius: 5px;
+        border-left: 5px solid #4CAF50;
         text-align: left;
         font-size: 1.2em;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         background-color: #ffcccb;
     }
+
     .events:nth-of-type(odd) {
         background-color: #ffcccb;
     }
+
     .events:nth-of-type(even) {
         background-color: #90ee90;
+
     }
-    #unregister {
+
+    .unregister-button {
         background-color: #116638;
         color: white;
         padding: 10px 20px;
-        margin-top: 20px;
+        margin-top: 10px;
         border: none;
         cursor: pointer;
-        font-size: 1.2em;
+        font-size: 1em;
+        border-radius: 4px;
+        transition: background-color 0.2s ease-in-out;
+        display: inline-block;
     }
-    #unregister:hover {
-        opacity: 0.8;
+
+    .unregister-button:hover {
+        background-color: #0e5529;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+
     }
-    #unregister {
-      background-color: #116638;
-      padding: 5px;
-      color: white;
-      margin-top: 20px;
+
+    .events form {
+        text-align: center;
     }
 </style>
-<div>
-    Events and Workshops you have registered for:
+
+
+{{!-- <div>
+    <h2>Events and Workshops you have registered for:</h2>
 </div>
 {{#each events}}
 <div class="events">
@@ -53,4 +77,17 @@
     <input type="hidden" name="eventId" value={{this._id}}>
     <input type="submit" id="unregister" value="Unregister">
 </form>
-{{/each}}
+{{/each}} --}}
+
+<div class="events-container">
+    <h2>Events and Workshops you have registered for:</h2>
+    {{#each events}}
+    <div class="events">
+        {{this.name}}
+        <form method="POST" action="/unregister">
+            <input type="hidden" name="eventId" value="{{this._id}}">
+            <input type="submit" class="unregister-button" value="Unregister">
+        </form>
+    </div>
+    {{/each}}
+</div>
