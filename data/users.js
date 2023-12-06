@@ -91,18 +91,6 @@ const registerForEvent = async (id, emailid, event) => {
 
   
   const userCollection = await users();
-  
-
-  // let newRegisterRequest={
-    
-  //   eventid:id,
-  //   emailid:emailid,
-  //   RegisteredEvent:event
-  //   ////eventName : event.name (to get event name)
-  //   ////eventDescription : event.description (to get event description)
-  //   ////can do this for name, date, time, venue, host, description
-    
-  // }
   const updateInfo = await userCollection.updateOne({emailId:emailid}, {$addToSet: {RegisteredEvents : event}});
 
 
@@ -137,11 +125,8 @@ const registeredEvents = async (emailid) => {
 const unregisterForEvent = async (eventId,emailId) => {
   emailid = emailId.trim();
   eventid = eventId.trim();
-
   const userCollection = await users();
-
   const updateInfo = await userCollection.updateOne({emailId:emailid}, {$pull: {RegisteredEvents : {_id:eventid}}});
-
 
   if (updateInfo.modifiedCount === 0){
     throw "Error: Update failed";
@@ -155,7 +140,6 @@ const unregisterForEvent = async (eventId,emailId) => {
 
 
 };
-
 
   const postMessage = async (from,to,description) => {
 
@@ -192,7 +176,6 @@ const unregisterForEvent = async (eventId,emailId) => {
   };
 
   const retrieveMessages = async (email) => {
-
     email = email.trim()
 
     const userCollection = await users();
@@ -207,7 +190,6 @@ const unregisterForEvent = async (eventId,emailId) => {
   };
 
   const readMessages = async (email) => {
-
     email = email.trim()
 
     const userCollection = await users();
@@ -252,13 +234,12 @@ const unregisterForEvent = async (eventId,emailId) => {
       throw "Invalid Email";
     }
     const reviewCollection = await reviews();
-    //const insertInfo;
+ 
     if(rId){
       insertInfo = await reviewCollection.updateOne({"_id": new ObjectId(rId)}, {$set: {"title":title,"description":description}});
     } else {
       insertInfo = await reviewCollection.insertOne(subReview);
-    }
-    
+    }   
     
       if (!insertInfo.acknowledged){
         throw 'Error : Could not send message';
@@ -266,8 +247,6 @@ const unregisterForEvent = async (eventId,emailId) => {
 
     return subReview;
   };
-
-
 
   const submitRating = async (from,rid,eventId) => {
       

@@ -2,6 +2,12 @@ const express = require('express');
 const router = express.Router();
 const index = require('../data/index');
 const xss = require('xss');
+const path = require('path'); // Import the path module
+const fs = require('fs');
+const multer = require('multer');
+const storage = multer.memoryStorage(); // You can customize storage as per your needs
+const upload = multer({ storage: storage });
+
 
 router.use(async(req,res,next) => {
     if(req.session.user){
@@ -87,22 +93,24 @@ router.route('/create-event')
     }
      
 })
-  .post(async (req, res) => {
-      try {
-          let date = xss(req.body.date);
-          let name = xss(req.body.name);
-          let email = xss(req.session.user.emailId)
-          let time = xss(req.body.time)
-          let venue = xss(req.body.address)
-          let description = xss(req.body.description)
-          let host = xss(req.body.host)
-          let price = xss(req.body.price)
-          await index.events.createEvent(name, email, date, time, venue, host, description,price);
-          res.redirect('/create-event');
-      }catch(e) {
-         console.log(e)
-      }
-  })
+.post(upload.single('eventPicture'), async (req, res) => {
+    try {
+       let date = xss(req.body.date);
+       let name = xss(req.body.name);
+       let email = xss(req.session.user.emailId);
+       let time = xss(req.body.time);
+       let venue = xss(req.body.address);
+       let description = xss(req.body.description);
+       let host = xss(req.body.host);
+       let price = xss(req.body.price);
+       let eventPicture = req.file; // Access the uploaded file
+
+       await index.events.createEvent(name, email, date, time, venue, host, description, price, eventPicture);
+       res.redirect('/create-event');
+    } catch (e) {
+       console.log(e);
+    }
+ });
 
   router
 .route('/allevents/request-event')
@@ -135,9 +143,7 @@ router
         if (!req.session.user) {
             return res.redirect('/sign-in');
         }
-        // if(!allevents){
-        //     throw 'No Events'
-        // }
+        
         else{
             let allevents = await index.events.getAllHostedEvents(req.session.user.emailId);
             return res.status(200).render('hosted_events',{title:'LearnLocally', head:'LearnLocally',events:allevents});
@@ -218,7 +224,8 @@ router.route('/filterEvents')
             if(event.venue){
                 const lat = req.query.lat;
                 const lng = req.query.lng;
-                let res =  await fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?destinations=${event.venue}&origins=${lat},${lng}&units=imperial&key=`)
+                let res =  await fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?destinations=${event.venue}&origins=${lat},${lng}&units=imperial&key=AIzaSyDz9Z4d140uhptRw9DgOFNopgStEcVfEc0
+             `)
                 res = await res.json();
                 const dist = res?.rows[0].elements[0].distance?.text;
                     if(dist && dist.includes('mi')){
@@ -252,9 +259,8 @@ router.route('/submit-review/:id')
            let rId = xss(req.body.rId);
            
           await index.users.submitReview(req.session.user.emailId,title,description,eventId,rId);
-          //return res.redirect('./allevents/'+eventId)
+        
           res.redirect('/allevents/'+eventId);
-          //return res.status(200).render('./allevents/'+eventId, {message: 'Review submitted successfully.'})
       }catch(e) {
           return res.status(404).render('./submitReview', {title: "Message", error: e})
       }
@@ -275,9 +281,7 @@ router.route('/submit-review/:id')
       let rId= req.params.id;
       let eventId= req.params.eventId;
     
-      //await index.users.submitRating(req.session.user.emailId,rateId,eventId);
       let revDetails = await index.events.getreviewbyId(req.params.id);
-      //res.redirect('/submit-review/'+eventId+'/1' )
       res.render('./submitReview',{eventId:eventId,rId:rId,title:revDetails.title,desc:revDetails.description} )
       
   })
@@ -288,10 +292,8 @@ router.route('/submit-review/:id')
       let eventId= req.params.eventId;
       let rId = req.params.id;
       console.log(eventId);
-      //await index.users.submitRating(req.session.user.emailId,rateId,eventId);
        let revDetails = await index.events.deleteReviewbyId(rId);
         
-      //res.redirect('/submit-review/'+eventId+'/1' )
      res.redirect('/allevents/'+eventId);
       
   })

@@ -20,7 +20,13 @@
          </div>
          <div id="no-title" class="div-text"  hidden>Please enter the title of the Event</div>
       </div>
-
+      <div class="row mb-2">
+            <label for="eventPicture" class="col-sm-2 col-form-label">Event Picture: </label>
+            <div class="col-sm-6">
+              <input type="file" class="input" id="eventPicture" name="eventPicture" accept="image/*">
+            </div>
+            <div id="no-event-picture" class="div-text" hidden>Please select an event picture</div>
+        </div>
         <div class="row mb-2">
                <label for="emailIdInput" class="col-sm-2 col-form-label">Email : </label>
                <div class="col-sm-6">
@@ -128,7 +134,7 @@ const form = document.getElementById('createevent-form');
 const locationsAvailable = document.getElementById('locationList');
 let Gmap, Gmarker;
 
-const __KEY = "";
+const __KEY = "AIzaSyDz9Z4d140uhptRw9DgOFNopgStEcVfEc0";
 
 actionBtn.addEventListener('click', e => {
   // hide the button 
@@ -336,4 +342,5 @@ inputClicked = (result) => {
 </script> 
 </main>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key="></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDz9Z4d140uhptRw9DgOFNopgStEcVfEc0
+"></script>

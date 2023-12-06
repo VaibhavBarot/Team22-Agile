@@ -1,7 +1,5 @@
 const { ObjectId } = require('mongodb');
 const {events,reviews, ratings,reports} = require('../config/mongocollections');
-const session = require('express-session');
-
 
 const createEvent = async (name, email, date, time, venue, host, description,price) => {
 
@@ -14,6 +12,7 @@ const createEvent = async (name, email, date, time, venue, host, description,pri
 
     let newEvent ={
       name:name,
+      eventPicture:"",
       email:email,
       date:date,
       time:time,
@@ -22,6 +21,16 @@ const createEvent = async (name, email, date, time, venue, host, description,pri
       description:description,
       price:price
     }
+
+    if (eventPicture && eventPicture.mimetype.startsWith('image/')) {
+      const fileBuffer = eventPicture.buffer;
+      const fileName = `event-pic-${Date.now()}.png`;
+      const filePath = path.join(__dirname, '../public/uploads/events/', fileName);
+
+      fs.writeFileSync(filePath, fileBuffer);
+
+      newEvent.eventpic = `/uploads/events/${fileName}`;
+   }
 
     const insertInfo = await eventCollection.insertOne(newEvent);
       if (!insertInfo.acknowledged || !insertInfo.insertedId){
@@ -97,13 +106,7 @@ const getEventbyId = async(id) => {
 const createReport = async(reporterEmailID, reportedEmailId, comment) => {
   const reportCollection = await reports();
   try {
-    // console.log("Information about the report");
-    // console.log(reporterEmailID);
-    // console.log(reportedEmailId);
-    // console.log(comment);
-
     
-    //return "Done from event data file"
     let reportObj ={
       _id: new ObjectId(),
       reporterEmailID: reporterEmailID,
@@ -111,8 +114,6 @@ const createReport = async(reporterEmailID, reportedEmailId, comment) => {
       comment: comment
     }
 
-    // console.log("reporter obj");
-    // console.log(reportObj);
     const report = await reportCollection.insertOne(reportObj)
     if (!report.acknowledged || !report.insertedId){
       throw 'Error : Could not add report';
@@ -166,7 +167,6 @@ const getreviewbyId = async(id) => {
 
 
 const deleteReviewbyId  = async(id) => {
-  console.log('review id:.........'+id);
   const reviewCollection = await reviews();
   try {
      const eventReviews = await reviewCollection.deleteOne({"_id": new ObjectId(id)});
