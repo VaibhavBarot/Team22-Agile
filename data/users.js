@@ -93,16 +93,6 @@ const registerForEvent = async (id, emailid, event) => {
   const userCollection = await users();
   
 
-  // let newRegisterRequest={
-    
-  //   eventid:id,
-  //   emailid:emailid,
-  //   RegisteredEvent:event
-  //   ////eventName : event.name (to get event name)
-  //   ////eventDescription : event.description (to get event description)
-  //   ////can do this for name, date, time, venue, host, description
-    
-  // }
   const updateInfo = await userCollection.updateOne({emailId:emailid}, {$addToSet: {RegisteredEvents : event}});
 
 
