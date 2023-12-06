@@ -37,7 +37,7 @@ router.route('/sign-in')
         password = password.trim();
 
         let user = await index.users.login(emailId, password);
-        req.session.user = {emailId: emailId, firstName:user.firstName, lastName:user.lastName, city:user.city, bio:user.bio, profilePicture:user.profilePicture};
+        req.session.user = {emailId: emailId, firstName:user.firstName, lastName:user.lastName, city:user.city};
         const messages = await index.users.retrieveMessages(req.session.user.emailId);
         let unreadMessage = (messages?.length) ? true:false;
         res.locals.messages = unreadMessage;
