@@ -55,7 +55,7 @@ router
 
         let emailid = xss(req.session.user.emailId)
         await index.users.registerForEvent(id, emailid, event);
-        res.redirect('/allevents/'+id);
+        res.redirect('/registeredevents');
     }catch(e) {
        console.log(e)
     }

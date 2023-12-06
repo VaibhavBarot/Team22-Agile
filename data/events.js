@@ -57,7 +57,6 @@ const getAllEvents = async () => {
   eventList.forEach(element => {
     element._id=element._id.toString();
   });
-
   
   return eventList;
 };
@@ -66,13 +65,32 @@ const getAllHostedEvents = async (email) => {
   const eventCollection = await events();
   const eventList = await eventCollection.find({email:email}).toArray();
 
-
   if (!getAllHostedEvents) throw 'Could not get hosted events';
   eventList.forEach(element => {
     element._id=element._id.toString();
   });
   return eventList;
 };
+
+const removePostHost = async (eventId,emailId) => {
+  emailId = emailId.trim();
+  eventId = eventId.trim();
+
+  const eventCollection = await events();
+  const updateInfo = await eventCollection.deleteOne({"_id": new ObjectId(eventId)});
+
+
+  if (updateInfo.modifiedCount === 0){
+    throw "Error: Update failed";
+  }
+  if (!updateInfo.acknowledged) {
+    throw "Error: could not be updated";
+  }
+
+  return {update: true};
+
+};
+
 
 const getEventbyId = async(id) => {
 
@@ -175,6 +193,7 @@ const deleteReviewbyId  = async(id) => {
     getreviewbyId,
     deleteReviewbyId,
     getRatingById,
-    createReport
+    createReport,
+    removePostHost
     
 }

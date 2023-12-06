@@ -162,6 +162,15 @@ router
     await index.users.unregisterForEvent(eventId,req.session.user.emailId)
     return res.redirect('registeredevents')
   }})
+
+router.route('/removepost')
+.post(async (req, res) => {
+  if(req.session.user){
+    let eventId = xss(req.body.eventId);
+    await index.events.removePostHost(eventId,req.session.user.emailId)
+    return res.redirect('hostedevents')
+  }})
+
   
 router.route('/send-message')
 .get(async (req,res) => {
