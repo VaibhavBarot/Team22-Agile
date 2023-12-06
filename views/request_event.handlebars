@@ -1,29 +1,91 @@
+<style>
+   body {
+      background-color: #f4f4f4;
+      font-family: Arial, sans-serif;
+   }
+
+   main {
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+   }
+
+   .row {
+      width: 100%;
+   }
+
+   .col-md-5 {
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+   }
+
+   .input {
+      width: calc(100% - 10px);
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+
+   }
+
+   .btnq {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      margin-top: 1rem;
+   }
+
+   .btnq:hover {
+      background-color: #449d44;
+
+   }
+
+   @media (max-width: 768px) {
+      .col-md-5 {
+         box-sizing: border-box;
+         margin: 0 15px;
+
+      }
+   }
+</style>
 <main>
+
    <div class="row">
       <div class="col-md-5">
          <br>
          <h2>Request an Event</h2>
          <form method="POST" id="requestevent-form" action="?">
 
- <div class="row mb-2">
+            <div class="row mb-2">
                <label for="emailIdInput" class="col-sm-2 col-form-label">Email :</label>
                <div class="col-sm-6">
                   <input type="email" class="input" id="emailIdInput" name="emailIdInput"
                      placeholder="Enter your email address">
                </div>
- 
 
-      <div class="row mb-2">
-         <label for="description" class="col-sm-2 col-form-label"> Description: </label>
-         <div class="col-sm-6">
-            <input type="text" class="input" id="description" name="description" placeholder="Enter a description">
-         </div>
-    
-    <br>
 
-      <input type="submit" class="btnq" value="Request Event">
-   </form>
-   <br>
+               <div class="row mb-2">
+                  <label for="description" class="col-sm-2 col-form-label"> Description: </label>
+                  <div class="col-sm-6">
+                     <input type="text" class="input" id="description" name="description"
+                        placeholder="Enter a description">
+                  </div>
+
+                  <br>
+
+                  <input type="submit" class="btnq" value="Request Event">
+         </form>
+         <br>
       </div>
-</div>
+   </div>
 </main>
