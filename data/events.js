@@ -1,9 +1,9 @@
 const { ObjectId } = require('mongodb');
-const {events,reviews, ratings,reports} = require('../config/mongocollections');
+const {events,reviews, ratings} = require('../config/mongocollections');
 const session = require('express-session');
 
 
-const createEvent = async (name, email, date, time, venue, host, description,price) => {
+const createEvent = async (name, email, date, time, venue, host, description) => {
 
     name = name.trim();
     venue = venue.trim()
@@ -20,7 +20,7 @@ const createEvent = async (name, email, date, time, venue, host, description,pri
       venue:venue,
       host:host,
       description:description,
-      price:price
+      rating:rating
     }
 
     const insertInfo = await eventCollection.insertOne(newEvent);
@@ -65,18 +65,6 @@ const getAllEvents = async () => {
   return eventList;
 };
 
-const getAllHostedEvents = async (email) => {
-  const eventCollection = await events();
-  const eventList = await eventCollection.find({email:email}).toArray();
-
-
-  if (!getAllHostedEvents) throw 'Could not get hosted events';
-  eventList.forEach(element => {
-    element._id=element._id.toString();
-  });
-  return eventList;
-};
-
 const getEventbyId = async(id) => {
 
   if (!id) throw 'You must provide an id to search for';
@@ -92,36 +80,6 @@ const getEventbyId = async(id) => {
   event._id=event._id.toString();
   return event;
 };
-
-
-const createReport = async(reporterEmailID, reportedEmailId, comment) => {
-  const reportCollection = await reports();
-  try {
-    // console.log("Information about the report");
-    // console.log(reporterEmailID);
-    // console.log(reportedEmailId);
-    // console.log(comment);
-
-    
-    //return "Done from event data file"
-    let reportObj ={
-      _id: new ObjectId(),
-      reporterEmailID: reporterEmailID,
-      reportedEmailId: reportedEmailId,
-      comment: comment
-    }
-
-    // console.log("reporter obj");
-    // console.log(reportObj);
-    const report = await reportCollection.insertOne(reportObj)
-    if (!report.acknowledged || !report.insertedId){
-      throw 'Error : Could not add report';
-    }
-    return reportObj
-  } catch (error) {
-    return error;
-  }
-}
 
 const getreviewsbyId = async(id) => {
 
@@ -166,7 +124,7 @@ const getreviewbyId = async(id) => {
 
 
 const deleteReviewbyId  = async(id) => {
-  console.log('review id:.........'+id);
+
   const reviewCollection = await reviews();
   try {
      const eventReviews = await reviewCollection.deleteOne({"_id": new ObjectId(id)});
@@ -176,16 +134,27 @@ const deleteReviewbyId  = async(id) => {
   
 };
 
+const eventRatings = async (eventId) => {
+  eventId = eventId.trim();
+
+  const eventCollection = await events();
+  const eventRates = await eventCollection.findOne({"_id":new ObjectId(eventId)});
+ 
+  if(eventRates==null){
+      throw "Event rates does not exists";
+  }
+  return eventRates.EventRating;
+};
+
   module.exports={
     createEvent,
     getAllEvents,
     getEventbyId,
     requestEvent,
-    getAllHostedEvents,
     getreviewsbyId,
     getreviewbyId,
     deleteReviewbyId,
     getRatingById,
-    createReport
+    eventRatings
     
 }

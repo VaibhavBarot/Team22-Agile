@@ -3,7 +3,9 @@ const router = express.Router();
 const eventData = require('../data/events');
 const index = require('../data/index');
 const xss = require('xss');
-const { reviews } = require('../config/mongocollections');
+const { reviews,users,events } = require('../config/mongocollections');
+const { ObjectId } = require('mongodb');
+
 
 
 router
@@ -39,11 +41,34 @@ router
             let eventReviews = await index.events.getreviewsbyId(req.params.id);
            
             let details = await index.events.getEventbyId(req.params.id);
-
+            const userCollection = await users();
+            const count = await userCollection.findOne({"RegisteredEvents._id":req.params.id});
+            const eventCollection = await events();
+            const rateCount = await eventCollection.findOne({"_id":new ObjectId(req.params.id) ,"EventRating.email": req.session.user.emailId});
+            let  EvenRates = await index.events.eventRatings(req.params.id);
+            console.log('Rates.....'+EvenRates);
+            let total = 0;
+            let TotalRate = 0;
+            if(EvenRates) {
+            for(var i=0; i<EvenRates.length; i++) {
+                 total= Number(total)+Number(EvenRates[i].rid);
+            }
+            TotalRate =total/EvenRates.length;
+        }
+            console.log('Rates.....'+total);
+            // console.log('Avg.....'+TotalRate);
+            // console.log('Rate count.....'+rateCount);
+            let hrefUrl= "";
+           if(count !== null && rateCount === null){
+               hrefUrl= "/submit-rating/"+req.params.id;
+           }else {
+               hrefUrl=  "javascript:void(0)}"
+           }
+            console.log('href...'+hrefUrl)
             let rating =await index.events.getRatingById(req.params.id)
-            let ratings =  [{rate:1,eventId:req.params.id,rid:rating.rid},{rate:2,eventId:req.params.id,rid:rating.rid},{rate:3,eventId:req.params.id,rid:rating.rid},{rate:4,eventId:req.params.id,rid:rating.rid},{rate:5,eventId:req.params.id,rid:rating.rid}]
-            req.session.eventId= details;
-            return res.render('event_details',{title:'LearnLocally', head:'LearnLocally',name:details.name, date:details.date, time:details.time, venue: details.venue, host: details.host, description: details.description,eventId: details._id, reviews: eventReviews,rates:ratings, price:details.price});
+            let ratings =  [{rate:1,eventId:req.params.id,rid:TotalRate,hrefUrl:hrefUrl},{rate:2,eventId:req.params.id,rid:TotalRate,hrefUrl:hrefUrl},{rate:3,eventId:req.params.id,rid:TotalRate,hrefUrl:hrefUrl},{rate:4,eventId:req.params.id,rid:TotalRate,hrefUrl:hrefUrl},{rate:5,eventId:req.params.id,rid:TotalRate,hrefUrl:hrefUrl}] 
+             req.session.eventId= details;
+            return res.render('event_details',{title:'LearnLocally', head:'LearnLocally',name:details.name, date:details.date, time:details.time, venue: details.venue, host: details.host, description: details.description,eventId: details._id, reviews: eventReviews,rates:ratings,hrefUrl:hrefUrl});
         }
     } catch (e) {
         return res.status(404).render('errorPage',{error:e});
@@ -63,44 +88,6 @@ router
        console.log(e)
     }
   })
-
-  router
-  .route('/api/report')
-  .get(async (req, res) => {
-    try {
-      // You can add any logic needed for handling the GET request
-      // console.log("Report GET fIRED");
-      res.render('reportForm');
-    } catch (error) {
-      // console.error(error);
-      res.status(500).render('errorPage', { error: 'Internal Server Error' });
-    }
-  })
-  .post(async (req, res) => {
-    try {
-        // console.log("Report Post method Fired");
-      // Assuming you have a function to handle report creation in your data file
-      const { reportedEmailId, comment } = req.body;
-
-      // Validate form data if needed
-
-      // Use xss to sanitize input if necessary
-      const sanitizedReportedEmailId = xss(reportedEmailId);
-      const sanitizedComment = xss(comment);
-      const sanitizedReporterEmailID = req.session.user.emailId
-
-      // Call your createReport function or equivalent
-      const result = await eventData.createReport(sanitizedReporterEmailID, sanitizedReportedEmailId, sanitizedComment)
-
-      // Handle the result from the data file, you can customize this based on your needs
-      res.status(200).render('successMsg', { successMessage: 'Report submitted successfully!' });
-
-    } catch (error) {
-      // console.error(error);
-      res.status(500).render('errorMsg', { errorMessage: 'Error submitting report. Please try again.' });
-
-    }
-  });
   
   
 module.exports = router

@@ -1,416 +1,79 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Event</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
-  <style>
-    {
-        {
-        !-- body {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          min-height: 100vh;
-          background-color: #f0f0f0;
-          margin-top: -60px;
-          font-family: 'Roboto', sans-serif;
-        }
-
-        --
-      }
-    }
-
-    .container {
-      width: 100%;
-      max-width: 600px;
-      margin-top: 20px;
-    }
-
-    .card-panel {
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    h2 {
-      text-align: center;
-      font-size: 24px;
-      font-weight: 400;
-      color: #333;
-      margin-bottom: 30px;
-    }
-
-    .input-field label {
-      color: #9e9e9e;
-    }
-
-    .input-field input[type=text]:focus+label,
-    .input-field input[type=email]:focus+label,
-    .input-field input[type=date]:focus+label,
-    .input-field input[type=time]:focus+label,
-    .input-field input[type=number]:focus+label,
-    .input-field textarea:focus+label {
-      color: #4caf50;
-    }
-
-    .input-field input[type=text]:focus,
-    .input-field input[type=email]:focus,
-    .input-field input[type=date]:focus,
-    .input-field input[type=time]:focus,
-    .input-field input[type=number]:focus,
-    .input-field textarea:focus {
-      border-bottom: 1px solid #4caf50;
-      box-shadow: 0 1px 0 0 #4caf50;
-    }
-
-    button.btn {
-      width: 100%;
-      background-color: #4caf50;
-    }
-
-    button.btn:hover {
-      background-color: #43a047;
-    }
-
-    #map {
-      height: 500px;
-      width: 100%;
-    }
-  </style>
-  <main>
-    <div class="container">
-      <div class="card-panel white">
-        <br>
-        <h2 style="text-align: center;">Create an Event</h2>
-        <form method="POST" id="createevent-form" action="/create-event">
+<main>
+   <div class="row">
+      <div class="col-md-5">
+         <br>
+         <h2>Create an Event</h2>
+         <form method="POST" id="createevent-form" action="/create-event">
 
           <div class="row mb-2">
-            <label for="name" class="col-sm-2 col-form-label">Name : </label>
-            <div class="col-sm-6">
-              <input type="text" size="25" class="input" id="name" name="name"
-                placeholder="Enter the title of the event" required>
-            </div>
-            <div id="no-title" class="div-text" hidden>Please enter the title of the Event</div>
-          </div>
-
-          <div class="row mb-2">
-            <label for="emailIdInput" class="col-sm-2 col-form-label">Email : </label>
-            <div class="col-sm-6">
-              <input type="email" class="input" id="emailIdInput" name="emailIdInput" placeholder="Enter a valid email"
-                required>
-            </div>
-            <div id="no-email" class="div-text" hidden>Please enter your email</div>
-          </div>
-
-          <div class="row mb-2">
-            <label for="date" class="col-sm-2 col-form-label">Date : </label>
-            <div class="col-sm-6">
-              <input type="date" class="input" id="date" name="date" placeholder="MM/DD/YYYY" required>
-            </div>
-            <div id="no-date" class="div-text" hidden>Please enter the date of the Event</div>
-          </div>
-
-
-          <div class="row mb-2">
-            <label for="time" class="col-sm-2 col-form-label">Time : </label>
-            <div class="col-sm-6">
-              <input type="time" class="input" id="time" name="time" placeholder="XX:YY" required>
-            </div>
-            <div id="no-date" class="div-text" hidden>Please enter the date of the Event</div>
-          </div>
-
-          <div class="row mb-2">
-            <label for="price" class="col-sm-2 col-form-label">Price : </label>
-            <div class="col-sm-6">
-              <input type="number" class="input" id="price" name="price" placeholder="$" required>
-            </div>
-          </div>
-
-          <div class="row mb-2">
-            <label for="host" class="col-sm-2 col-form-label">Host : </label>
-            <div class="col-sm-6">
-              <input type="text" class="input" id="host" name="host" placeholder="Enter your name" required>
-            </div>
-            <div id="no-first-name" class="div-text" hidden>Please enter your first name</div>
-          </div>
-
-
-          <div class="row mb-2">
-            <label for="description" class="col-sm-2 col-form-label">Description: </label>
-            <div class="col-sm-6">
-              <input type="text" size="50" class="input" id="description" name="description"
-                placeholder="Enter a description of the event" required>
-            </div>
-            <div id="no-description" class="div-text" hidden>Please enter a description of the Event</div>
-          </div>
-
-          <h4>Event Address</h4>
-
-          <p>You can click the button below to use your current location as your address</p>
-
-          <div id="map">
-          </div>
-
-          <p id="current_position"></p>
-
-
-          <button id="showMe" class="btn center-align">
-            Use My Location
-          </button>
-          <div id="locationList"></div>
-          <br>
-
-          <div class="input-field">
-            <textarea class="materialize-textarea" id="address" type="text" placeholder="Address (Area and Street)"
-              required></textarea>
-          </div>
-
-          <div class="input-field">
-            <input id="locality" type="text" placeholder="Locality" required>
-          </div>
-
-          <div class="input-field">
-            <input id="city" type="text" placeholder="City/District/Town" required>
-          </div>
-          <div class="input-field">
-            <input id="postal_code" type="text" placeholder="Pin Code" required>
-          </div>
-
-          <div class="input-field">
-            <input id="landmark" type="text" placeholder="Landmark">
-          </div>
-
-          <div class="input-field">
-            <input id="state" type="text" placeholder="State" required>
-          </div>
-
-
-          <br>
-          <input type="submit" class="btn center-align" value="Create Event">
-        </form>
+         <label for="name" class="col-sm-2 col-form-label">Name : </label>
+         <div class="col-sm-6">
+            <input type="text" size = "25" class="input" id="name" name="name" placeholder="Enter the title of the event">
+         </div>
+         <div id="no-title" class="div-text"  hidden>Please enter the title of the Event</div>
       </div>
 
-    </div>
-    <script>
-      //This div will be used to show Google map
-      const mapArea = document.getElementById('map');
+        <div class="row mb-2">
+               <label for="emailIdInput" class="col-sm-2 col-form-label">Email : </label>
+               <div class="col-sm-6">
+                  <input type="email" class="input" id="emailIdInput" name="emailIdInput"
+                     placeholder="Enter a valid email">
+               </div>
+               <div id="no-email" class="div-text" hidden>Please enter your email</div>
+            </div>
 
-      const $ = id => document.getElementById(id);
+      <div class="row mb-2">
+         <label for="date" class="col-sm-2 col-form-label">Date : </label>
+         <div class="col-sm-6">
+            <input type="date" class="input" id="date" name="date" placeholder="MM/DD/YYYY">
+         </div>
+         <div id="no-date" class="div-text" hidden>Please enter the date of the Event</div>
+      </div>
 
-      const actionBtn = document.getElementById('showMe');
-      const form = document.getElementById('createevent-form');
-      const locationsAvailable = document.getElementById('locationList');
-      let Gmap, Gmarker;
-
-      const __KEY = "";
-
-      actionBtn.addEventListener('click', e => {
-        // hide the button 
-        actionBtn.style.display = "none";
-        e.preventDefault();
-
-        // get the user's position
-        getLocation();
-
-      });
-
-      form.addEventListener('submit', (e) => {
-        //e.preventDefault();
-      })
-
-      getLocation = () => {
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(displayLocation, showError, options)
-
-        }
-        else {
-          M.toast({ html: 'Sorry, your browser does not support this feature... Please Update your Browser to enjoy it', classes: 'rounded' });
-        }
-      }
-
-      // displayLocation
-      displayLocation = (position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-
-        const latlng = { lat, lng }
-
-        showMap(latlng, lat, lng);
-        createMarker(latlng);
-        mapArea.style.display = "block";
-        getGeolocation(lat, lng);
-
-      }
-
-      // Recreates the map
-      showMap = (latlng, lat, lng) => {
-        let mapOptions = {
-          center: latlng,
-          zoom: 17
-        };
-
-        Gmap = new google.maps.Map(mapArea, mapOptions);
-
-        Gmap.addListener('drag', function () {
-          Gmarker.setPosition(this.getCenter()); // set marker position to map center
-        });
-
-        Gmap.addListener('dragend', function () {
-          Gmarker.setPosition(this.getCenter()); // set marker position to map center
-        });
-
-        Gmap.addListener('idle', function () {
-
-          Gmarker.setPosition(this.getCenter()); // set marker position to map center
-
-          if (Gmarker.getPosition().lat() !== lat || Gmarker.getPosition().lng() !== lng) {
-            setTimeout(() => {
-              console.log("I have to get new geocode here!")
-              updatePosition(this.getCenter().lat(), this.getCenter().lng()); // update position display
-            }, 2000);
-          }
-        });
-
-      }
-
-      // Creates marker on the screen
-      createMarker = (latlng) => {
-        let markerOptions = {
-          position: latlng,
-          map: Gmap,
-          animation: google.maps.Animation.BOUNCE,
-          clickable: true
-          // draggable: true
-        };
-        Gmarker = new google.maps.Marker(markerOptions);
-
-      }
-
-      // updatePosition on 
-      updatePosition = (lat, lng) => {
-
-        getGeolocation(lat, lng);
-      }
-
-      // Displays the different error messages
-      showError = (error) => {
-        mapArea.style.display = "block"
-        switch (error.code) {
-          case error.PERMISSION_DENIED:
-            mapArea.innerHTML = "You denied the request for your location."
-            break;
-          case error.POSITION_UNAVAILABLE:
-            mapArea.innerHTML = "Your Location information is unavailable."
-            break;
-          case error.TIMEOUT:
-            mapArea.innerHTML = "Your request timed out. Please try again"
-            break;
-          case error.UNKNOWN_ERROR:
-            mapArea.innerHTML = "An unknown error occurred please try again after some time."
-            break;
-        }
-      }
-
-      const options = {
-        enableHighAccuracy: true
-      }
-
-      getGeolocation = (lat, lng) => {
-
-        const latlng = lat + "," + lng;
-
-        fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlng}&key=${__KEY}`)
-
-          .then(res => res.json())
-          .then(data => populateCard(data.results));
-
-      }
-
-      function removeAddressCards() {
-        if (locationsAvailable.hasChildNodes()) {
-          while (locationsAvailable.firstChild) {
-            locationsAvailable.removeChild(locationsAvailable.firstChild);
-          }
-        }
-      }
-
-      populateCard = (geoResults) => {
-        // check if a the container has a child node to force re-render of dom
-        removeAddressCards();
-
-        geoResults.map(geoResult => {
-
-          // first create the input div container
-          const addressCard = document.createElement('div');
-
-          // then create the input and label elements
-          const input = document.createElement('input');
-          const label = document.createElement('label');
-
-          // then add materialize classes to the div and input
-          addressCard.classList.add("card");
-          input.classList.add("with-gap");
-
-          // add attributes to them
-          label.setAttribute("for", geoResult.place_id);
-          label.innerHTML = geoResult.formatted_address;
-
-          input.setAttribute("name", "address");
-          input.setAttribute("type", "radio");
-          input.setAttribute("value", geoResult.formatted_address);
-          input.setAttribute("id", geoResult.place_id);
-          input.addEventListener('click', () => inputClicked(geoResult));
-          // finalResult = input.value;
-          finalResult = geoResult.formatted_address;
-
-
-          addressCard.appendChild(input);
-          addressCard.appendChild(label);
-
-          return (
-            locationsAvailable.appendChild(addressCard)
-          );
-        })
-      }
-
-      inputClicked = (result) => {
-        result.address_components.map(component => {
-          const types = component.types
-
-          if (types.includes('postal_code')) {
-            $('postal_code').value = component.long_name
-          }
-
-          if (types.includes('locality')) {
-            $('locality').value = component.long_name
-          }
-
-          if (types.includes('administrative_area_level_2')) {
-            $('city').value = component.long_name
-          }
-
-          if (types.includes('administrative_area_level_1')) {
-            $('state').value = component.long_name
-          }
-
-          if (types.includes('point_of_interest')) {
-            $('landmark').value = component.long_name
-          }
-        });
-
-        $('address').value = result.formatted_address;
-        cons
-        // to avoid labels overlapping prefilled contents
-        M.updateTextFields();
-        removeAddressCards();
-      }
+      
+      <div class="row mb-2">
+         <label for="time" class="col-sm-2 col-form-label">Time : </label>
+         <div class="col-sm-6">
+            <input type="time" class="input" id="time" name="time" placeholder="XX:YY">
+         </div>
+         <div id="no-date" class="div-text" hidden>Please enter the date of the Event</div>
+      </div>
 
 
 
-    </script>
-  </main>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key="></script>
+    <div class="row mb-2">
+         <label for="Venue" class="col-sm-2 col-form-label">Venue : </label>
+         <div class="col-sm-6">
+            <input type="text" class="input" id="venue" name="venue" placeholder="Enter the address">
+         </div>
+         <div id="no-first-name" class="div-text" hidden>Please enter your first name</div>
+      </div>
+
+      
+         <div class="row mb-2">
+         <label for="host" class="col-sm-2 col-form-label">Host : </label>
+         <div class="col-sm-6">
+            <input type="text" class="input" id="host" name="host" placeholder="Enter your name">
+         </div>
+         <div id="no-first-name" class="div-text" hidden>Please enter your first name</div>
+      </div>
+
+
+      <div class="row mb-2">
+         <label for="description" class="col-sm-2 col-form-label">Description: </label>
+         <div class="col-sm-6">
+            <input type="text" size = "50" class="input" id="description" name="description" placeholder="Enter a description of the event">
+         </div>
+         <div id="no-description" class="div-text"  hidden>Please enter a description of the Event</div>
+      </div>
+
+
+     
+
+      <br>
+      <input type="submit" class="btnq" value="Create Event">
+   </form>
+   <br>
+      </div>
+</div>
+</main>

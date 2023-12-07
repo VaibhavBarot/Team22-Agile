@@ -3,10 +3,11 @@ const mongoCollections = require('../config/mongocollections');
 const users = mongoCollections.users
 const reviews = mongoCollections.reviews
 const ratings = mongoCollections.ratings
+const events = mongoCollections.events
 const bcrypt = require('bcryptjs');
 const validation = require('../helper')
 
-const createUser = async ( emailId, password, firstName, lastName, city) => {
+const createUser = async ( firstName, lastName,emailId, password) => {
 
   emailId = emailId.trim().toLowerCase();
   password = password.trim();
@@ -34,7 +35,7 @@ const createUser = async ( emailId, password, firstName, lastName, city) => {
 
   firstName = await validation.checkName(firstName, "First Name");
   lastName = await validation.checkName(lastName, "Last Name");
-  city = await validation.checkName(city, "City");
+
   const userCollection = await users();
 
   const existingUser = await userCollection.findOne({ emailId: emailId });
@@ -49,10 +50,7 @@ const createUser = async ( emailId, password, firstName, lastName, city) => {
     emailId:emailId,
     password:hash,
     firstName:firstName,
-    lastName:lastName,
-    city: city, 
-    bio: "",  
-    profilePicture: ""
+    lastName:lastName
 
   }
 
@@ -245,13 +243,16 @@ const unregisterForEvent = async (eventId,emailId) => {
     }
 
     const userCollection = await users();
+    const reviewCollection = await reviews();
+    
+    
     const user = await userCollection.findOne({
       emailId: from
     });
     if(user===null){
       throw "Invalid Email";
     }
-    const reviewCollection = await reviews();
+   
     //const insertInfo;
     if(rId){
       insertInfo = await reviewCollection.updateOne({"_id": new ObjectId(rId)}, {$set: {"title":title,"description":description}});
@@ -277,7 +278,6 @@ const unregisterForEvent = async (eventId,emailId) => {
   
 
     let subRate ={
-      eventId:eventId,
       email:from,
       rid:rid,
      }
@@ -292,16 +292,19 @@ const unregisterForEvent = async (eventId,emailId) => {
     const rateCollection = await ratings();
     const messages = (user.messages) ? user.messages : [];
     messages.push(subRate)
-    const insertInfo = await rateCollection.insertOne(subRate,
-      {
-      $set:{
-        messages:messages
-      }
-    });
-      if (!insertInfo.acknowledged){
-        throw 'Error : Could not send message';
-      }
 
+    
+    const eventCollection = await events();
+    const updateInfo = await eventCollection.updateOne({_id: new ObjectId(eventId)}, {$addToSet: {EventRating : subRate}});
+
+
+  if (updateInfo.modifiedCount === 0){
+    throw "Error: Update failed";
+  }
+  if (!updateInfo.acknowledged) {
+    throw "Error: could not be updated";
+  }
+    
     return subRate;
   };
 

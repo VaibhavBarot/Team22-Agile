@@ -37,7 +37,7 @@ router.route('/sign-in')
         password = password.trim();
 
         let user = await index.users.login(emailId, password);
-        req.session.user = {emailId: emailId, firstName:user.firstName, lastName:user.lastName, city:user.city};
+        req.session.user = {emailId: emailId, firstName:user.firstName, lastName:user.lastName};
         const messages = await index.users.retrieveMessages(req.session.user.emailId);
         let unreadMessage = (messages?.length) ? true:false;
         res.locals.messages = unreadMessage;
@@ -63,8 +63,7 @@ router.route('/sign-up')
         let password = xss(req.body.passwordInput);
         let firstName = xss(req.body.firstName);
         let lastName = xss(req.body.lastName);
-        let city = xss(req.body.city);
-        await index.users.createUser(emailId, password, firstName, lastName, city);
+        await index.users.createUser(emailId, password, firstName, lastName);
         res.redirect('/sign-in');
     }catch(e) {
         res.status(404).render('./sign_up', {title: "Sign-up Form", error: e})
@@ -91,13 +90,12 @@ router.route('/create-event')
       try {
           let date = xss(req.body.date);
           let name = xss(req.body.name);
-          let email = xss(req.session.user.emailId)
+          let email = xss(req.body.emailIdInput)
           let time = xss(req.body.time)
-          let venue = xss(req.body.address)
+          let venue = xss(req.body.venue)
           let description = xss(req.body.description)
           let host = xss(req.body.host)
-          let price = xss(req.body.price)
-          await index.events.createEvent(name, email, date, time, venue, host, description,price);
+          await index.events.createEvent(name, email, date, time, venue, host, description);
           res.redirect('/create-event');
       }catch(e) {
          console.log(e)
@@ -129,32 +127,14 @@ router.route('/create-event')
 })
 
 router
-.route('/hostedevents')
-.get(async (req, res) => {
-    try {
-        if (!req.session.user) {
-            return res.redirect('/sign-in');
-        }
-        // if(!allevents){
-        //     throw 'No Events'
-        // }
-        else{
-            let allevents = await index.events.getAllHostedEvents(req.session.user.emailId);
-            return res.status(200).render('hosted_events',{title:'LearnLocally', head:'LearnLocally',events:allevents});
-        }
-        } catch (e) {
-            res.status(404).render('errorPage', {error:e});
-        }
-
-
-})
-
-router
 .route('/registeredevents')
 .get(async (req, res) => {
   if(req.session.user){
     const events = await index.users.registeredEvents(req.session.user.emailId);
-    return res.render('registered_events',{events:events});
+            console.log('came........RG'+events);
+            let ratings =  [{rate:1},{rate:2},{rate:3},{rate:4},{rate:5}]  
+            
+    return res.render('registered_events',{events:events,rates:ratings});
   }  
 })
 
@@ -205,38 +185,6 @@ router.route('/read-messages')
     }
 })
 
-router.route('/filterEvents')
-.get(async (req,res) => {
-    let allevents = await index.events.getAllEvents();
-    const miles= req.query.distance;
-    const keyword = req.query.keyword;
-    const price = req.query.price;
-    const events = [];
-    for(const event of allevents){
-        let addEvent = true;
-        if(miles){
-            if(event.venue){
-                const lat = req.query.lat;
-                const lng = req.query.lng;
-                let res =  await fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?destinations=${event.venue}&origins=${lat},${lng}&units=imperial&key=`)
-                res = await res.json();
-                const dist = res?.rows[0].elements[0].distance?.text;
-                    if(dist && dist.includes('mi')){
-                        addEvent = (parseFloat(dist.replace('mi','').trim()) < miles) ? true:false;
-                 }
-             }
-        }
-        if(keyword){
-            addEvent = addEvent && (event.name.toLowerCase().includes(keyword.toLowerCase())) ? true:false;
-        }
-        if(price){
-            addEvent = addEvent && (event.price <= price) ? true:false;
-        }
-
-        if(addEvent) events.push(event);
-    }
-    return res.render('upcoming_events',{title:'LearnLocally', head:'LearnLocally',events:events});
-})
 
 router.route('/submit-review/:id')
   .get(async (req,res) => {
@@ -260,7 +208,7 @@ router.route('/submit-review/:id')
       }
   })
 
-  router.route('/submit-rating/:rid/:id')
+  router.route('/submit-rating/:id/:rid')
   .get(async (req,res) => {
       let rateId= req.params.rid
       let eventId= req.params.id;
@@ -287,8 +235,7 @@ router.route('/submit-review/:id')
       
       let eventId= req.params.eventId;
       let rId = req.params.id;
-      console.log(eventId);
-      //await index.users.submitRating(req.session.user.emailId,rateId,eventId);
+       //await index.users.submitRating(req.session.user.emailId,rateId,eventId);
        let revDetails = await index.events.deleteReviewbyId(rId);
         
       //res.redirect('/submit-review/'+eventId+'/1' )
