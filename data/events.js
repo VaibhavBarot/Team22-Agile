@@ -27,7 +27,6 @@ const createEvent = async (name, email, date, time, venue, host, description,pri
       if (!insertInfo.acknowledged || !insertInfo.insertedId){
         throw 'Error : Could not add event';
       }
-
     return newEvent;
   };
 
@@ -35,8 +34,6 @@ const createEvent = async (name, email, date, time, venue, host, description,pri
 
     emailId = emailId.trim();
     description = description.trim()
-  
-
     const eventCollection = await events();
 
     let newEventRequest ={
@@ -60,7 +57,6 @@ const getAllEvents = async () => {
   eventList.forEach(element => {
     element._id=element._id.toString();
   });
-
   
   return eventList;
 };
@@ -69,13 +65,32 @@ const getAllHostedEvents = async (email) => {
   const eventCollection = await events();
   const eventList = await eventCollection.find({email:email}).toArray();
 
-
   if (!getAllHostedEvents) throw 'Could not get hosted events';
   eventList.forEach(element => {
     element._id=element._id.toString();
   });
   return eventList;
 };
+
+const removePostHost = async (eventId,emailId) => {
+  emailId = emailId.trim();
+  eventId = eventId.trim();
+
+  const eventCollection = await events();
+  const updateInfo = await eventCollection.deleteOne({"_id": new ObjectId(eventId)});
+
+
+  if (updateInfo.modifiedCount === 0){
+    throw "Error: Update failed";
+  }
+  if (!updateInfo.acknowledged) {
+    throw "Error: could not be updated";
+  }
+
+  return {update: true};
+
+};
+
 
 const getEventbyId = async(id) => {
 
@@ -97,8 +112,6 @@ const getEventbyId = async(id) => {
 const createReport = async(reporterEmailID, reportedEmailId, comment) => {
   const reportCollection = await reports();
   try {
-   
-    //return "Done from event data file"
     let reportObj ={
       _id: new ObjectId(),
       reporterEmailID: reporterEmailID,
@@ -136,12 +149,12 @@ const getRatingById = async(id) => {
   if (id.trim().length === 0)
     throw 'Id cannot be an empty string or just spaces';
   const ratingCollection = await ratings();
-  let eventRatin = await ratingCollection.findOne({eventId: id});
-  if (eventRatin === null) {
-    eventRatin ="";
+  let eventRating = await ratingCollection.findOne({eventId: id});
+  if (eventRating === null) {
+    eventRating ="";
   }
 
-  return eventRatin;
+  return eventRating;
 };
 
 const getreviewbyId = async(id) => {
@@ -179,6 +192,7 @@ const deleteReviewbyId  = async(id) => {
     getreviewbyId,
     deleteReviewbyId,
     getRatingById,
-    createReport
+    createReport,
+    removePostHost
     
 }
