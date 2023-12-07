@@ -112,7 +112,6 @@ const getEventbyId = async(id) => {
 const createReport = async(reporterEmailID, reportedEmailId, comment) => {
   const reportCollection = await reports();
   try {
-
     let reportObj ={
       _id: new ObjectId(),
       reporterEmailID: reporterEmailID,
