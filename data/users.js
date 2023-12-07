@@ -1,6 +1,8 @@
 const { ObjectId } = require('mongodb');
 const mongoCollections = require('../config/mongocollections');
 const users = mongoCollections.users
+const reviews = mongoCollections.reviews
+const ratings = mongoCollections.ratings
 const bcrypt = require('bcryptjs');
 const validation = require('../helper')
 
@@ -9,6 +11,7 @@ const createUser = async ( emailId, password, firstName, lastName, city) => {
   emailId = emailId.trim().toLowerCase();
   password = password.trim();
 
+  
   if (!emailId || !password) 
     throw `Email or Password cannot be empty`;
   if (typeof emailId != "string") 
@@ -16,8 +19,8 @@ const createUser = async ( emailId, password, firstName, lastName, city) => {
   let myemailId = emailId.split(" ")
   if (myemailId.length > 1) 
     throw  `EmailId cannot have spaces`;
-  if (!(/^[a-zA-Z]+[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/).test(emailId)) 
-    throw  `Invalid email address`;
+  if (!(/^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/).test(emailId)) 
+    throw  `Invalid email address ${emailId}`;
   if (emailId.length < 4) 
     throw `Email must be at least 4 characters long`;
 
@@ -222,6 +225,87 @@ const unregisterForEvent = async (eventId,emailId) => {
   };
 
 
+  const submitReview = async (from,title,description,eventId,rId) => {
+      
+    title = title.trim();
+    from = from.trim();
+    description = description.trim();
+
+    if(!title){
+      throw "Please enter title";
+    }
+    if(!description){
+      throw "Please enter comment";
+    }
+    let subReview ={
+      eventId:eventId,
+      email:from,
+      title:title,
+      description:description
+    }
+
+    const userCollection = await users();
+    const user = await userCollection.findOne({
+      emailId: from
+    });
+    if(user===null){
+      throw "Invalid Email";
+    }
+    const reviewCollection = await reviews();
+    //const insertInfo;
+    if(rId){
+      insertInfo = await reviewCollection.updateOne({"_id": new ObjectId(rId)}, {$set: {"title":title,"description":description}});
+    } else {
+      insertInfo = await reviewCollection.insertOne(subReview);
+    }
+    
+    
+      if (!insertInfo.acknowledged){
+        throw 'Error : Could not send message';
+      }
+
+    return subReview;
+  };
+
+
+
+  const submitRating = async (from,rid,eventId) => {
+      
+    rid = rid.trim();
+    from = from.trim();
+    eventId = eventId.trim();
+  
+
+    let subRate ={
+      eventId:eventId,
+      email:from,
+      rid:rid,
+     }
+
+    const userCollection = await users();
+    const user = await userCollection.findOne({
+      emailId: from
+    });
+    if(user===null){
+      throw "Invalid Email";
+    }
+    const rateCollection = await ratings();
+    const messages = (user.messages) ? user.messages : [];
+    messages.push(subRate)
+    const insertInfo = await rateCollection.insertOne(subRate,
+      {
+      $set:{
+        messages:messages
+      }
+    });
+      if (!insertInfo.acknowledged){
+        throw 'Error : Could not send message';
+      }
+
+    return subRate;
+  };
+
+
 module.exports={
   login,
   createUser,
@@ -230,5 +314,7 @@ module.exports={
   unregisterForEvent,
   postMessage,
   retrieveMessages,
-  readMessages
+  readMessages,
+  submitReview,
+  submitRating
 }
