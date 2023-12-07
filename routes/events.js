@@ -4,7 +4,14 @@ const eventData = require('../data/events');
 const index = require('../data/index');
 const xss = require('xss');
 const { reviews } = require('../config/mongocollections');
+const mongoCollections = require('../config/mongocollections');
+const users = mongoCollections.users
 
+
+// Function to check if the email exists in the seed.js file
+function isEmailInSeedFile(email) {
+  return seedData.emails.includes(email);
+}
 
 router
 .route('/')
@@ -76,6 +83,7 @@ router
       res.status(500).render('errorPage', { error: 'Internal Server Error' });
     }
   })
+  
   .post(async (req, res) => {
     try {
         // console.log("Report Post method Fired");
@@ -84,8 +92,15 @@ router
       let validEmailRegex = /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/
       if (!EmailId.match(validEmailRegex)){
         // return res.status(500).render('errorPage', { error: 'Invalid EmailId' });
-        res.status(500).render('errorMsg', { errorMessage: 'Invalid EmailId. Please try again.' });
+        return res.status(500).render('errorMsg', { errorMessage: 'Invalid EmailId. Please try again.' });
       }
+      const userCollection = await users();
+      const user = await userCollection.findOne({
+        emailId: EmailId
+   });
+      if(!user){
+        return res.status(500).render('errorMsg', { errorMessage: `User with this ${EmailId} does not exist` });
+  }
       // Validate form data if needed
 
       // Use xss to sanitize input if necessary
@@ -105,6 +120,8 @@ router
 
     }
   });
+  
+  
   
   
 module.exports = router
