@@ -239,7 +239,7 @@ router.route('/filterEvents')
             if(event.venue){
                 const lat = req.query.lat;
                 const lng = req.query.lng;
-                let res =  await fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?destinations=${event.venue}&origins=${lat},${lng}&units=imperial&key=AIzaSyDz9Z4d140uhptRw9DgOFNopgStEcVfEc0
+                let res =  await fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?destinations=${event.venue}&origins=${lat},${lng}&units=imperial&key=
              `)
                 res = await res.json();
                 const dist = res?.rows[0].elements[0].distance?.text;
