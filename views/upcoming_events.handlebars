@@ -36,29 +36,33 @@
     }
 
     .card-img-top {
-        border: 3px solid #2c3e50;
-        border-radius: 15px;
+
+        border-radius: 20px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         margin-top: 15px;
         width: 100%;
         height: auto;
         object-fit: cover;
+        padding: 20px;
     }
 
     .card-body {
         background-color: #ffffff;
-        padding: 15px;
+        padding: 25px;
         border-radius: 0 0 15px 15px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
 
     }
 
     .card {
-        margin-bottom: 30px;
         border: none;
         border-radius: 15px;
         overflow: hidden;
     }
+
+
+
 
     #error {
         width: 100%;
@@ -83,6 +87,8 @@
         padding: 20px;
         text-align: center;
     }
+
+
 
     h2 {
         color: #333;
@@ -173,27 +179,30 @@
     <div class="main-content">
         <div id="events-group" class="card-group">
             {{#each events}}
-            <div class="card">
-                <img class="card-img-top"
-                    src="https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F625808009%2F287287194141%2F1%2Foriginal.20231022-013522?h=230&w=460&auto=format%2Ccompress&q=75&sharp=10&rect=0%2C6%2C952%2C476&s=4cb2709c342b786e80306e5de678fc47"
-                    alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">{{name}}</h5>
-                    <p class="card-text">{{description}}</p>
-                    <p class="card-text">{{time}} | {{date}}</p>
-                    <p class="card-text">{{venue}}</p>
-                    <a href="/allevents/{{_id}}" class="btn btn-primary btn-lg">Details</a>
+            <div class="event-container">
+                <div class="card">
+                    <img class="card-img-top"
+                        src="https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F625808009%2F287287194141%2F1%2Foriginal.20231022-013522?h=230&w=460&auto=format%2Ccompress&q=75&sharp=10&rect=0%2C6%2C952%2C476&s=4cb2709c342b786e80306e5de678fc47"
+                        alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{name}}</h5>
+                        <p class="card-text">{{description}}</p>
+                        <p class="card-text">{{time}} | {{date}}</p>
+                        <p class="card-text">{{venue}}</p>
+                        <a href="/allevents/{{_id}}" class="btn btn-primary btn-lg">Details</a>
+                    </div>
+                    {{/each}}
                 </div>
-                {{/each}}
             </div>
+
             <br>
             <br>
             <br>
         </div>
-                    <form action="/allevents/request-event">
-                <button id="new-event" type="submit">Click here to request for an event!</button>
-            </form>
-        </div>
+        <form action="/allevents/request-event">
+            <button id="new-event" type="submit">Click here to request for an event!</button>
+        </form>
+    </div>
 </body>
 <script>
     document.getElementById('search').addEventListener('click', () => {
