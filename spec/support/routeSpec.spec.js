@@ -28,7 +28,8 @@ describe('Test endpoints', () => {
             emailIdInput:testUserEmail,
             passwordInput:'Qwerty@123',
             firstName:'Test',
-            lastName:'Test'
+            lastName:'Test',
+            city:'Hoboken'
         })
         expect(res.status).toBe(200);
       })
@@ -74,7 +75,7 @@ describe('Test endpoints', () => {
             date:'2023-10-31',
             name:'Pottery',
             time:'11:00',
-            venue:'549 Pineknoll St Caldwell, NJ 07006',
+            address:'549 Pineknoll St Caldwell, NJ 07006',
             host:'Test@123',
             description:'Come learn pottery'
         })
@@ -90,7 +91,7 @@ describe('Test endpoints', () => {
         const heading = dom.window.document.getElementsByTagName('h2')[0].innerHTML;
         expect(heading).toBe('Upcoming Events and Workshops near you:');
 
-        const events = dom.window.document.getElementsByClassName('events');
+        const events = dom.window.document.getElementsByClassName('card');
         expect(events.length).toBeGreaterThan(0);
 
         const event = Array.from(events).find(e => e.innerHTML.includes('Pottery'));
@@ -106,7 +107,7 @@ describe('Test endpoints', () => {
 
         const dom = new jsdom(res.data);
         const document = dom.window.document;
-
+        
         expect(document.querySelector('#name').innerHTML.includes('Pottery')).toBeTruthy();
 
         expect(document.querySelector('#date').innerHTML.includes('2023-10-31')).toBeTruthy();

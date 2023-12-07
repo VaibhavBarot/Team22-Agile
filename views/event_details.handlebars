@@ -78,36 +78,47 @@
 </head>
 <main>
 
-    <div class="row">
-        <div class="col-md-5 event-card" style="background-color: {{color}};">
-            <br>
-            <h2 id="heading">Event Details</h2>
-            <form method="POST" id="eventdetails-form" action="?">
-                <div id="name">
-                    <strong>Name:</strong> {{name}}
-                </div>
-                <div id="date">
-                    <strong>Date:</strong> {{date}}
-                </div>
-                <div id="time">
-                    <strong>Time:</strong> {{time}}
-                </div>
-                <div id="price">
-                    <strong>Price:</strong> {{price}} $
-                </div>
-                <div id="venue">
-                    <strong>Venue:</strong> {{venue}}
-                </div>
-                <div id="host">
-                    <strong>Host:</strong> {{host}}
-                </div>
-                <div id="description">
-                    <strong>Description:</strong> {{description}}
-                </div>
+   <div class="row">
+      <div class="col-md-5 event-card" style="background-color: {{color}};">
+         <br>
+         <h2 id="heading">Event Details</h2>
+         <form method="POST" id="eventdetails-form" action="?">
+    <div id="eventPicture">
+    
+    {{#if eventPicture}}
+        <img src="{{eventPicture}}" alt="{{name}} Image" style="max-width: 100%;">
+    {{else}}
+        <img src="/path/to/dummy-image.jpg" alt="Dummy Image" style="max-width: 100%;">
+    {{/if}}
+</div>
+    <div id="name">
+        <strong>Name:</strong> {{name}}
+    </div>
+    <div id="date">
+        <strong>Date:</strong> {{date}}
+    </div>
+    <div id="time">
+        <strong>Time:</strong> {{time}}
+    </div>
+    <div id="price">
+        <strong>Price:</strong> {{price}} $
+    </div>
+    <div id="venue">
+        <strong>Venue:</strong> {{venue}}
+    </div>
+    <div id="host">
+        <strong>Host:</strong> {{host}}
+    </div>
+    <div id="host">
+        <strong>Host Email:</strong> {{host}}
+    </div>
+    <div id="description">
+        <strong>Description:</strong> {{description}}
+    </div>
+    
+    <input type="submit" class="btnq" value="Register for event">
+   </form>
 
-
-                <input type="submit" class="btnq" value="Register for event">
-            </form>
     <add-to-calendar-button
 name={{name}}
 options="'Apple','Google'"

@@ -1,56 +1,51 @@
 const { ObjectId } = require('mongodb');
 const {events,reviews, ratings,reports} = require('../config/mongocollections');
-const session = require('express-session');
+const path = require('path'); 
+const fs = require('fs');
+const multer = require('multer');
+const storage = multer.memoryStorage(); 
+const upload = multer({ storage: storage });
 
+const createEvent = async (name, email, date, time, venue, host, description, price, eventPicture) => {
+  name = name.trim();
+  venue = venue.trim();
+  host = host.trim();
+  description = description.trim();
 
-const createEvent = async (name, email, date, time, venue, host, description,price) => {
+  const eventCollection = await events();
 
-    name = name.trim();
-    venue = venue.trim()
-    host = host.trim()
-    description = description.trim()
-
-    const eventCollection = await events();
-
-    let newEvent ={
-      name:name,
-      email:email,
-      date:date,
-      time:time,
-      venue:venue,
-      host:host,
-      description:description,
-      price:price
-    }
-
-    const insertInfo = await eventCollection.insertOne(newEvent);
-      if (!insertInfo.acknowledged || !insertInfo.insertedId){
-        throw 'Error : Could not add event';
-      }
-
-    return newEvent;
+  let newEvent = {
+      name: name,
+      eventPicture: "", // Initialize eventPicture property
+      email: email,
+      date: date,
+      time: time,
+      venue: venue,
+      host: host,
+      description: description,
+      price: price
   };
 
-  const requestEvent = async (emailId, description) => {
+  if (eventPicture && eventPicture.mimetype.startsWith('image/')) {
+      const fileBuffer = eventPicture.buffer;
+      const fileName = `event-pic-${Date.now()}.png`;
+      const filePath = path.join(__dirname, '../public/uploads/events/', fileName);
 
-    emailId = emailId.trim();
-    description = description.trim()
-  
+      fs.writeFileSync(filePath, fileBuffer);
 
-    const eventCollection = await events();
+      newEvent.eventPicture = `/uploads/events/${fileName}`;
+  }
 
-    let newEventRequest ={
-      emailId:emailId,
-      description:description
-    }
+  const insertInfo = await eventCollection.insertOne(newEvent);
+  if (!insertInfo.acknowledged || !insertInfo.insertedId) {
+      throw 'Error: Could not add event';
+  }
 
-    const insertInfo = await eventCollection.insertOne(newEventRequest);
-      if (!insertInfo.acknowledged || !insertInfo.insertedId){
-        throw 'Error : Could not add requested event';
-      }
+  return newEvent;
+};
 
-    return newEventRequest;
-  };
+
+
 
 const getAllEvents = async () => {
   const eventCollection = await events();
@@ -60,7 +55,6 @@ const getAllEvents = async () => {
   eventList.forEach(element => {
     element._id=element._id.toString();
   });
-
   
   return eventList;
 };
@@ -69,13 +63,32 @@ const getAllHostedEvents = async (email) => {
   const eventCollection = await events();
   const eventList = await eventCollection.find({email:email}).toArray();
 
-
   if (!getAllHostedEvents) throw 'Could not get hosted events';
   eventList.forEach(element => {
     element._id=element._id.toString();
   });
   return eventList;
 };
+
+const removePostHost = async (eventId,emailId) => {
+  emailId = emailId.trim();
+  eventId = eventId.trim();
+
+  const eventCollection = await events();
+  const updateInfo = await eventCollection.deleteOne({"_id": new ObjectId(eventId)});
+
+
+  if (updateInfo.modifiedCount === 0){
+    throw "Error: Update failed";
+  }
+  if (!updateInfo.acknowledged) {
+    throw "Error: could not be updated";
+  }
+
+  return {update: true};
+
+};
+
 
 const getEventbyId = async(id) => {
 
@@ -97,13 +110,7 @@ const getEventbyId = async(id) => {
 const createReport = async(reporterEmailID, reportedEmailId, comment) => {
   const reportCollection = await reports();
   try {
-    // console.log("Information about the report");
-    // console.log(reporterEmailID);
-    // console.log(reportedEmailId);
-    // console.log(comment);
-
     
-    //return "Done from event data file"
     let reportObj ={
       _id: new ObjectId(),
       reporterEmailID: reporterEmailID,
@@ -111,8 +118,6 @@ const createReport = async(reporterEmailID, reportedEmailId, comment) => {
       comment: comment
     }
 
-    // console.log("reporter obj");
-    // console.log(reportObj);
     const report = await reportCollection.insertOne(reportObj)
     if (!report.acknowledged || !report.insertedId){
       throw 'Error : Could not add report';
@@ -143,12 +148,12 @@ const getRatingById = async(id) => {
   if (id.trim().length === 0)
     throw 'Id cannot be an empty string or just spaces';
   const ratingCollection = await ratings();
-  let eventRatin = await ratingCollection.findOne({eventId: id});
-  if (eventRatin === null) {
-    eventRatin ="";
+  let eventRating = await ratingCollection.findOne({eventId: id});
+  if (eventRating === null) {
+    eventRating ="";
   }
 
-  return eventRatin;
+  return eventRating;
 };
 
 const getreviewbyId = async(id) => {
@@ -166,7 +171,6 @@ const getreviewbyId = async(id) => {
 
 
 const deleteReviewbyId  = async(id) => {
-  console.log('review id:.........'+id);
   const reviewCollection = await reviews();
   try {
      const eventReviews = await reviewCollection.deleteOne({"_id": new ObjectId(id)});
@@ -180,12 +184,12 @@ const deleteReviewbyId  = async(id) => {
     createEvent,
     getAllEvents,
     getEventbyId,
-    requestEvent,
     getAllHostedEvents,
     getreviewsbyId,
     getreviewbyId,
     deleteReviewbyId,
     getRatingById,
-    createReport
+    createReport,
+    removePostHost
     
 }

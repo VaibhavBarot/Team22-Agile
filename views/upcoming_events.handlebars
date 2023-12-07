@@ -2,7 +2,7 @@
     #filter {
         height: 64px;
         width: 60%;
-        margin: 5% auto 0 auto;
+        margin: 2% auto 0 auto;
         border: 1px solid #ddd;
         border-radius: 10px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -102,11 +102,6 @@
 
     }
 
-    #events-group {
-        display: flex;
-        flex-direction: column;
-    }
-
     .events:nth-of-type(4n+1) {
         background-color: #ffcccb;
 
@@ -140,10 +135,9 @@
         background-color: #4CAF50;
         color: white;
         padding: 14px 20px;
-        margin: 20px 0;
+        margin-left: 40%;
         border: none;
         cursor: pointer;
-        width: 50%;
         font-size: 1.2em;
     }
 
@@ -156,6 +150,10 @@
     <br>
     <br>
     <h2 style="text-align:center;">Upcoming Events and Workshops near you:</h2>
+    </br>
+    <form action="/allevents/request-event">
+                <button id="new-event" type="submit">Click here to request for an event!</button>
+            </form>
     <div id="filter">
         <div class="controls">
             <input id="miles" type="number" name="distance" class="form-control-sm">
@@ -179,30 +177,30 @@
     <div class="main-content">
         <div id="events-group" class="card-group">
             {{#each events}}
-            <div class="event-container">
-                <div class="card">
+            <div class="card">
+                 {{#if eventPicture}}
+                    <img class="card-img-top" src="{{eventPicture}}" alt="Card image cap">
+                {{else}}
                     <img class="card-img-top"
                         src="https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F625808009%2F287287194141%2F1%2Foriginal.20231022-013522?h=230&w=460&auto=format%2Ccompress&q=75&sharp=10&rect=0%2C6%2C952%2C476&s=4cb2709c342b786e80306e5de678fc47"
-                        alt="Card image cap">
-                    <div class="card-body">
-                        <h5 class="card-title">{{name}}</h5>
-                        <p class="card-text">{{description}}</p>
-                        <p class="card-text">{{time}} | {{date}}</p>
-                        <p class="card-text">{{venue}}</p>
-                        <a href="/allevents/{{_id}}" class="btn btn-primary btn-lg">Details</a>
-                    </div>
-                    {{/each}}
+                        alt="Default Card Image">
+                {{/if}}
+                <div class="card-body">
+                    <h5 class="card-title">{{name}}</h5>
+                    <p class="card-text">{{description}}</p>
+                    <p class="card-text">{{time}} | {{date}}</p>
+                    <p class="card-text">{{venue}}</p>
+                    <a href="/allevents/{{_id}}" class="btn btn-primary btn-lg">Details</a>
                 </div>
+            {{/each}}
             </div>
 
             <br>
             <br>
             <br>
+
+            
         </div>
-        <form action="/allevents/request-event">
-            <button id="new-event" type="submit">Click here to request for an event!</button>
-        </form>
-    </div>
 </body>
 <script>
     document.getElementById('search').addEventListener('click', () => {
