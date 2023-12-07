@@ -2,7 +2,7 @@
     #filter {
         height: 64px;
         width: 60%;
-        margin: 5% auto 0 auto;
+        margin: 2% auto 0 auto;
         border: 1px solid #ddd;
         border-radius: 10px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -129,10 +129,9 @@
         background-color: #4CAF50;
         color: white;
         padding: 14px 20px;
-        margin: 20px 0;
+        margin-left: 40%;
         border: none;
         cursor: pointer;
-        width: 50%;
         font-size: 1.2em;
     }
 
@@ -144,7 +143,10 @@
 <body>
     <br>
     <br>
-    <h2 style="text-align:center;">Upcoming Events and Workshops near you:</h2>
+    <h2 style="text-align:center;">Upcoming Events and Workshops near you:</h2><br>
+     <form action="/allevents/request-event">
+        <button id="new-event" type="submit">Click here to request for an event!</button>
+    </form>
     <div id="filter">
         <div class="controls">
             <input id="miles" type="number" name="distance" class="form-control-sm">
@@ -185,9 +187,6 @@
             <br>
             <br>
         </div>
-                    <form action="/allevents/request-event">
-                <button id="new-event" type="submit">Click here to request for an event!</button>
-            </form>
         </div>
 </body>
 <script>
