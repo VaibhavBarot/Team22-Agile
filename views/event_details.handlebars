@@ -1,92 +1,148 @@
 <style>
-    .event-card {
-        border-radius: 5px;
+    .event-card,
+    .review-card {
+        border-radius: 10px;
         padding: 20px;
         margin: 20px auto;
         color: #333;
         max-width: 600px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background: #ffffff;
+        line-height: 1.6;
 
     }
 
     .btnq {
         display: block;
-        width: 100%;
-        padding: 10px;
+        width: calc(100% - 20px);
+        padding: 15px;
         margin-top: 20px;
         background-color: #4CAF50;
         color: white;
         border: none;
         cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s, box-shadow 0.3s;
+
     }
 
     .btnq:hover {
         background-color: #45a049;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
     }
 
     #heading {
         margin-bottom: 20px;
+        text-align: center;
+
     }
 
     div {
-        margin-bottom: 10px;
+        margin-bottom: 15px;
+
+    }
+
+    .events,
+    .review-card {
+        background: #f9f9f9;
+        padding: 15px;
+        border-left: 4px solid #4CAF50;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    }
+
+    .user-reviews-header {
+        margin-top: 40px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .events a,
+    .review-card a {
+        color: #4CAF50;
+        margin-right: 10px;
+    }
+
+    .events a:hover,
+    .review-card a:hover {
+        text-decoration: underline;
+        color: #367B37;
+
     }
 </style>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/add-to-calendar-button@2" async defer></script>
+</head>
 <main>
 
-   <div class="row">
-      <div class="col-md-5 event-card" style="background-color: {{color}};">
-         <br>
-         <h2 id="heading">Event Details</h2>
-         <form method="POST" id="eventdetails-form" action="?">
-    <div id="name">
-        <strong>Name:</strong> {{name}}
+    <div class="row">
+        <div class="col-md-5 event-card" style="background-color: {{color}};">
+            <br>
+            <h2 id="heading">Event Details</h2>
+            <form method="POST" id="eventdetails-form" action="?">
+                <div id="name">
+                    <strong>Name:</strong> {{name}}
+                </div>
+                <div id="date">
+                    <strong>Date:</strong> {{date}}
+                </div>
+                <div id="time">
+                    <strong>Time:</strong> {{time}}
+                </div>
+                <div id="price">
+                    <strong>Price:</strong> {{price}} $
+                </div>
+                <div id="venue">
+                    <strong>Venue:</strong> {{venue}}
+                </div>
+                <div id="host">
+                    <strong>Host:</strong> {{host}}
+                </div>
+                   <div id="email">
+                    <strong>Host Email:</strong> {{email}}
+                </div>
+
+                <div id="description">
+                    <strong>Description:</strong> {{description}}
+                </div>
+
+
+                <input type="submit" class="btnq" value="Register for event">
+            </form>
+    <add-to-calendar-button
+name={{name}}
+options="'Apple','Google'"
+location={{venue}}
+startDate={{date}}
+endDate={{date}}
+timeZone="America/Los_Angeles"
+    ></add-to-calendar-button>
+            <a href="/submit-review/{{eventId}}">
+                <input type="submit" class="btnq" value="Submit Review">
+                <br></a>
+
+
+        </div>
+        <div class="col-md-5">
+            <h2 id="heading" class="user-reviews-header">User Reviews</h2>
+            {{#each reviews}}
+            <div class="review-card"> <!-- Use the review-card class for styling -->
+                <strong>{{this.title}}</strong>
+                <p>{{this.description}}</p>
+                <div>
+                    <a href="/edit-review/{{this._id}}/{{this.eventId}}">Edit</a>
+                    <a href="/delete-review/{{this._id}}/{{this.eventId}}">Delete</a>
+                </div>
+            </div>
+            {{/each}}
+        </div>
     </div>
-    <div id="date">
-        <strong>Date:</strong> {{date}}
-    </div>
-    <div id="time">
-        <strong>Time:</strong> {{time}}
-    </div>
-    <div id="price">
-        <strong>Price:</strong> {{price}} $
-    </div>
-    <div id="venue">
-        <strong>Venue:</strong> {{venue}}
-    </div>
-    <div id="host">
-        <strong>Host:</strong> {{host}}
-    </div>
-    <div id="description">
-        <strong>Description:</strong> {{description}}
-    </div>
-    
-    
-    <input type="submit" class="btnq" value="Register for event">
    </form>
- 
-   <a href="/submit-review/{{eventId}}">
-   <input type="submit" class="btnq" value="Submit Review">
-   <br></a>
 
-    
-</div>
-<div class="col-md-5">
-     <h2 id="heading">User Reviews</h2>
-     {{#each reviews}}
-<div class="events">
-    {{this.title}} 
-</div>
-    <div class="events">
-    {{this.description}} 
-</div>  
- <div class="events">
-    <a href="/edit-review/{{this._id}}/{{this.eventId}}">Edit</a>
-    <a href="/delete-review/{{this._id}}/{{this.eventId}}">Delete</a>
-</div>  
-
-    
-
-{{/each}}
+   <br>
 </div>
 </div>
 </main>

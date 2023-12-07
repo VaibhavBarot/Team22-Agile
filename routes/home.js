@@ -96,7 +96,7 @@ router.route('/create-event')
           let host = xss(req.body.host)
           let price = xss(req.body.price)
           await index.events.createEvent(name, email, date, time, venue, host, description,price);
-          res.redirect('/create-event');
+          res.redirect('/hostedevents');
       }catch(e) {
          console.log(e)
       }
