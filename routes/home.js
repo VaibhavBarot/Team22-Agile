@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const index = require('../data/index');
 const xss = require('xss');
-const path = require('path'); // Import the path module
+const path = require('path'); 
 const fs = require('fs');
 const multer = require('multer');
-const storage = multer.memoryStorage(); // You can customize storage as per your needs
+const storage = multer.memoryStorage(); 
 const upload = multer({ storage: storage });
 
 
@@ -93,24 +93,34 @@ router.route('/create-event')
     }
      
 })
-.post(upload.single('eventPicture'), async (req, res) => {
-    try {
-       let date = xss(req.body.date);
-       let name = xss(req.body.name);
-       let email = xss(req.session.user.emailId);
-       let time = xss(req.body.time);
-       let venue = xss(req.body.address);
-       let description = xss(req.body.description);
-       let host = xss(req.body.host);
-       let price = xss(req.body.price);
-       let eventPicture = req.file; // Access the uploaded file
+router.route('/create-event')
+   .post(upload.single('eventPicture'), async (req, res) => {
+      try {
+         let date = xss(req.body.date);
+         let name = xss(req.body.name);
+         let email = xss(req.session.user.emailId);
+         let time = xss(req.body.time);
+         let venue = xss(req.body.address);
+         let description = xss(req.body.description);
+         let host = xss(req.body.host);
+         let price = xss(req.body.price);
 
-       await index.events.createEvent(name, email, date, time, venue, host, description, price, eventPicture);
-       res.redirect('/create-event');
-    } catch (e) {
-       console.log(e);
-    }
- });
+         
+         if (!req.file) {
+            console.error('Error: No file uploaded');
+            return res.status(400).send('Bad Request: No file uploaded');
+         }
+
+         let eventPicture = req.file; // Access the uploaded file
+
+         await index.events.createEvent(name, email, date, time, venue, host, description, price, eventPicture);
+         res.redirect('/create-event');
+      } catch (e) {
+         console.error(e);
+         res.status(500).send('Internal Server Error');
+      }
+   });
+
 
   router
 .route('/allevents/request-event')

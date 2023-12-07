@@ -40,7 +40,7 @@ router
             let rating =await index.events.getRatingById(req.params.id)
             let ratings =  [{rate:1,eventId:req.params.id,rid:rating.rid},{rate:2,eventId:req.params.id,rid:rating.rid},{rate:3,eventId:req.params.id,rid:rating.rid},{rate:4,eventId:req.params.id,rid:rating.rid},{rate:5,eventId:req.params.id,rid:rating.rid}]
             req.session.eventId= details;
-            return res.render('event_details',{title:'LearnLocally', head:'LearnLocally',name:details.name, date:details.date, time:details.time, venue: details.venue, host: details.host, description: details.description,eventId: details._id, reviews: eventReviews,rates:ratings, price:details.price});
+            return res.render('event_details',{title:'LearnLocally', head:'LearnLocally',eventPicture:details.eventPicture, name:details.name, date:details.date, time:details.time, venue: details.venue, host: details.host, description: details.description,eventId: details._id, reviews: eventReviews,rates:ratings, price:details.price});
         }
     } catch (e) {
         return res.status(404).render('errorPage',{error:e});

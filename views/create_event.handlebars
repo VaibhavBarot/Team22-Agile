@@ -11,7 +11,7 @@
       <div class="col-md-12">
          <br>
          <h2 style="text-align: center;">Create an Event</h2>
-         <form method="POST" id="createevent-form" action="/create-event">
+         <form method="POST" id="createevent-form" action="/create-event" enctype="multipart/form-data">
 
           <div class="row mb-2">
          <label for="name" class="col-sm-2 col-form-label">Name : </label>
@@ -331,7 +331,7 @@ inputClicked = (result) => {
   });
 
   $('address').value = result.formatted_address;
-  cons
+  
   // to avoid labels overlapping prefilled contents
   M.updateTextFields();
   removeAddressCards();
