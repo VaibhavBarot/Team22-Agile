@@ -1,34 +1,49 @@
 const { ObjectId } = require('mongodb');
 const {events,reviews, ratings,reports} = require('../config/mongocollections');
-const session = require('express-session');
+const path = require('path'); 
+const fs = require('fs');
+const multer = require('multer');
+const storage = multer.memoryStorage(); 
+const upload = multer({ storage: storage });
 
+const createEvent = async (name, email, date, time, venue, host, description, price, eventPicture) => {
+  name = name.trim();
+  venue = venue.trim();
+  host = host.trim();
+  description = description.trim();
 
-const createEvent = async (name, email, date, time, venue, host, description,price) => {
+  const eventCollection = await events();
 
-    name = name.trim();
-    venue = venue.trim()
-    host = host.trim()
-    description = description.trim()
-
-    const eventCollection = await events();
-
-    let newEvent ={
-      name:name,
-      email:email,
-      date:date,
-      time:time,
-      venue:venue,
-      host:host,
-      description:description,
-      price:price
-    }
-
-    const insertInfo = await eventCollection.insertOne(newEvent);
-      if (!insertInfo.acknowledged || !insertInfo.insertedId){
-        throw 'Error : Could not add event';
-      }
-    return newEvent;
+  let newEvent = {
+      name: name,
+      eventPicture: "", // Initialize eventPicture property
+      email: email,
+      date: date,
+      time: time,
+      venue: venue,
+      host: host,
+      description: description,
+      price: price
   };
+
+  if (eventPicture && eventPicture.mimetype.startsWith('image/')) {
+      const fileBuffer = eventPicture.buffer;
+      const fileName = `event-pic-${Date.now()}.png`;
+      const filePath = path.join(__dirname, '../public/uploads/events/', fileName);
+
+      fs.writeFileSync(filePath, fileBuffer);
+
+      newEvent.eventPicture = `/uploads/events/${fileName}`;
+  }
+
+  const insertInfo = await eventCollection.insertOne(newEvent);
+  if (!insertInfo.acknowledged || !insertInfo.insertedId) {
+      throw 'Error: Could not add event';
+  }
+
+  return newEvent;
+};
+
 
 
 
@@ -95,6 +110,7 @@ const getEventbyId = async(id) => {
 const createReport = async(reporterEmailID, reportedEmailId, comment) => {
   const reportCollection = await reports();
   try {
+    
     let reportObj ={
       _id: new ObjectId(),
       reporterEmailID: reporterEmailID,
@@ -155,7 +171,6 @@ const getreviewbyId = async(id) => {
 
 
 const deleteReviewbyId  = async(id) => {
-  console.log('review id:.........'+id);
   const reviewCollection = await reviews();
   try {
      const eventReviews = await reviewCollection.deleteOne({"_id": new ObjectId(id)});

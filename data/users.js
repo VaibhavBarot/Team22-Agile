@@ -118,13 +118,10 @@ const registeredEvents = async (emailid) => {
 };
 
 const unregisterForEvent = async (eventId,emailId) => {
-  emailId = emailId.trim();
-  eventId = eventId.trim();
-
+  emailid = emailId.trim();
+  eventid = eventId.trim();
   const userCollection = await users();
-
-  const updateInfo = await userCollection.updateOne({emailId:emailId}, {$pull: {RegisteredEvents : {_id:eventId}}});
-
+  const updateInfo = await userCollection.updateOne({emailId:emailid}, {$pull: {RegisteredEvents : {_id:eventid}}});
 
   if (updateInfo.modifiedCount === 0){
     throw "Error: Update failed";
@@ -195,7 +192,6 @@ return {update: true};
   };
 
   const retrieveMessages = async (email) => {
-
     email = email.trim()
 
     const userCollection = await users();
@@ -210,7 +206,6 @@ return {update: true};
   };
 
   const readMessages = async (email) => {
-
     email = email.trim()
 
     const userCollection = await users();
@@ -259,8 +254,7 @@ return {update: true};
       insertInfo = await reviewCollection.updateOne({"_id": new ObjectId(reviewId)}, {$set: {"title":title,"description":description}});
     } else {
       insertInfo = await reviewCollection.insertOne(subReview);
-    }
-    
+    }   
     
       if (!insertInfo.acknowledged){
         throw 'Error : Could not send message';
@@ -268,8 +262,6 @@ return {update: true};
 
     return subReview;
   };
-
-
 
   const submitRating = async (from,rid,eventId) => {
       
