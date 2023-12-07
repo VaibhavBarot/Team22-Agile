@@ -32,9 +32,9 @@ const createUser = async ( emailId, password, firstName, lastName, city) => {
   if (!(/^(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$/).test(password))
     throw "Password must contain at least 8 characters, One uppercase letter, One special charcter and One number"
 
-  firstName = await validation.checkName(firstName, "First Name");
-  lastName = await validation.checkName(lastName, "Last Name");
-  city = await validation.checkName(city, "City");
+  await validation.checkName(firstName, "First Name");
+  await validation.checkName(lastName, "Last Name");
+  await validation.checkName(city, "City");
   const userCollection = await users();
 
   const existingUser = await userCollection.findOne({ emailId: emailId });

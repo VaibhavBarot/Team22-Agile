@@ -26,7 +26,7 @@ const createEvent = async (name, email, date, time, venue, host, description, pr
       price: price
   };
 
-  if (eventPicture && eventPicture.mimetype.startsWith('image/')) {
+  if (eventPicture) {
       const fileBuffer = eventPicture.buffer;
       const fileName = `event-pic-${Date.now()}.png`;
       const filePath = path.join(__dirname, '../public/uploads/events/', fileName);
