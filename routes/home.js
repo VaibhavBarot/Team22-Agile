@@ -115,9 +115,9 @@ router.route('/create-event')
 
 .post(async (req, res) => {
   try {
-      let emailId = xss(req.body.emailIdInput);
       let description = xss(req.body.description)
-      await index.events.requestEvent(emailId, description);
+      let emailId = xss(req.session.user.emailId)
+      await index.users.requestEvent(emailId, description);
       res.redirect('/allevents/request-event');
   }catch(e) {
      console.log(e)
