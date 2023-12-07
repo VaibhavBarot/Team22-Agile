@@ -134,6 +134,29 @@ const unregisterForEvent = async (eventId,emailId) => {
 
 };
 
+const requestEvent = async (emailId, description) => {
+
+  emailId = emailId.trim();
+  description = description.trim()
+  const userCollection = await users();
+
+  const updateInfo = await userCollection.updateOne({emailId:emailId}, {$addToSet: {eventRequest : description}});
+;
+if (updateInfo.modifiedCount === 0){
+  throw "Error: Update failed";
+}
+if (!updateInfo.acknowledged) {
+  throw "Error: could not be updated";
+}
+
+return {update: true};
+
+};
+
+
+
+
+
   const postMessage = async (from,to,description) => {
 
     to = to.trim()
@@ -287,5 +310,6 @@ module.exports={
   retrieveMessages,
   readMessages,
   submitReview,
-  submitRating
+  submitRating,
+  requestEvent
 }

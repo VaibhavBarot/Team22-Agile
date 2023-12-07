@@ -45,24 +45,7 @@ const createEvent = async (name, email, date, time, venue, host, description, pr
 };
 
 
-  const requestEvent = async (emailId, description) => {
 
-    emailId = emailId.trim();
-    description = description.trim()
-    const eventCollection = await events();
-
-    let newEventRequest ={
-      emailId:emailId,
-      description:description
-    }
-
-    const insertInfo = await eventCollection.insertOne(newEventRequest);
-      if (!insertInfo.acknowledged || !insertInfo.insertedId){
-        throw 'Error : Could not add requested event';
-      }
-
-    return newEventRequest;
-  };
 
 const getAllEvents = async () => {
   const eventCollection = await events();
@@ -201,7 +184,6 @@ const deleteReviewbyId  = async(id) => {
     createEvent,
     getAllEvents,
     getEventbyId,
-    requestEvent,
     getAllHostedEvents,
     getreviewsbyId,
     getreviewbyId,
