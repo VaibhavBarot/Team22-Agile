@@ -13,9 +13,7 @@ router
         if (!req.session.user) {
             return res.redirect('/sign-in');
         }
-        // if(!allevents){
-        //     throw 'No Events'
-        // }
+
         else{
             let allevents = await index.events.getAllEvents();
             return res.status(200).render('upcoming_events',{title:'LearnLocally', head:'LearnLocally',events:allevents});
@@ -37,7 +35,7 @@ router
         else {
                     
             let eventReviews = await index.events.getreviewsbyId(req.params.id);
-           
+        
             let details = await index.events.getEventbyId(req.params.id);
 
 
@@ -70,17 +68,13 @@ router
   .route('/api/report')
   .get(async (req, res) => {
     try {
-      // You can add any logic needed for handling the GET request
-      // console.log("Report GET fIRED");
       res.render('reportForm');
     } catch (error) {
-      // console.error(error);
       res.status(500).render('errorPage', { error: 'Internal Server Error' });
     }
   })
   .post(async (req, res) => {
     try {
-        // console.log("Report Post method Fired");
       // Assuming you have a function to handle report creation in your data file
       const { reportedEmailId, comment } = req.body;
 
@@ -98,7 +92,6 @@ router
       res.status(200).render('successMsg', { successMessage: 'Report submitted successfully!' });
 
     } catch (error) {
-      // console.error(error);
       res.status(500).render('errorMsg', { errorMessage: 'Error submitting report. Please try again.' });
 
     }

@@ -5,71 +5,56 @@
         margin: 0;
         padding: 0;
     }
-
-    h2 {
-        text-align: center;
-        color: #333;
-        padding-top: 20px;
-    }
-
     .events-container {
+        width: 60%;
         margin: 0 auto;
-        max-width: 600px;
-        overflow: auto;
     }
-
     .events {
         padding: 20px;
         margin: 8px 0;
-        border-radius: 5px;
-        border-left: 5px solid #4CAF50;
+        border-left: 5px solid #ccc;
         text-align: left;
         font-size: 1.2em;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         background-color: #ffcccb;
     }
-
     .events:nth-of-type(odd) {
         background-color: #ffcccb;
     }
-
     .events:nth-of-type(even) {
         background-color: #90ee90;
     }
-
-    .event-request {
-        text-align: center;
-        padding: 20px;
-    }
-
-    .hosted-event-button {
+       #unregister {
         background-color: #116638;
         color: white;
         padding: 10px 20px;
-        margin-top: 10px;
+        margin-top: 20px;
         border: none;
         cursor: pointer;
-        font-size: 1em;
-        border-radius: 4px;
-        transition: background-color 0.2s ease-in-out;
+        font-size: 1.2em;
     }
-
-    .hosted-event-button:hover {
-        background-color: #0e5529;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    #unregister:hover {
+        opacity: 0.8;
     }
+    #unregister {
+      background-color: #116638;
+      padding: 5px;
+      color: white;
+      margin-top: 20px;
+    }
+  
 </style>
 
 <body>
-    <h2>Hosted Events:</h2>
-    <div class="events-container">
-        {{#each events}}
-        <div class="events">
-            <strong>{{this.name}}</strong>
-            <p>Date: {{this.date}}</p>
-            <p>Time: {{this.time}}</p>
-        </div>
-        {{/each}}
+<div>
+    Events and Workshops you are hosting:
+</div>
+ {{#each events}}
+        <div class="events"> Workshop : {{this.name }} <br /> Date : {{this.date}} <br /></a></div>
+        <form method="POST" action="/removepost">
+    <input type="hidden" name="eventId" value={{this._id}}>
+    <input type="submit" id="removepost" value="Cancel Event">
+</form>
+    {{/each}}
         <div class="event-request">
             <form action="/create-event">
                 <button type="submit" class="hosted-event-button">Click here to create an event!</button>

@@ -86,24 +86,10 @@ const login = async (emailId, password) => {
 
 };
 
-const registerForEvent = async (id, emailid, event) => {
-  emailid = emailid.trim();
-
-  
+const registerForEvent = async (id, emailId, event) => {
+  emailId = emailId.trim();
   const userCollection = await users();
-  
-
-  // let newRegisterRequest={
-    
-  //   eventid:id,
-  //   emailid:emailid,
-  //   RegisteredEvent:event
-  //   ////eventName : event.name (to get event name)
-  //   ////eventDescription : event.description (to get event description)
-  //   ////can do this for name, date, time, venue, host, description
-    
-  // }
-  const updateInfo = await userCollection.updateOne({emailId:emailid}, {$addToSet: {RegisteredEvents : event}});
+  const updateInfo = await userCollection.updateOne({emailId:emailId}, {$addToSet: {RegisteredEvents : event}});
 
 
   if (updateInfo.modifiedCount === 0){
@@ -113,16 +99,13 @@ const registerForEvent = async (id, emailid, event) => {
     throw "Error: could not be updated";
   }
 
-
   return {update: true};
-
 
 };
 
 const registeredEvents = async (emailid) => {
   emailid = emailid.trim();
 
-  
   const userCollection = await users();
   const user = await userCollection.findOne({
     emailId: emailid
@@ -135,12 +118,12 @@ const registeredEvents = async (emailid) => {
 };
 
 const unregisterForEvent = async (eventId,emailId) => {
-  emailid = emailId.trim();
-  eventid = eventId.trim();
+  emailId = emailId.trim();
+  eventId = eventId.trim();
 
   const userCollection = await users();
 
-  const updateInfo = await userCollection.updateOne({emailId:emailid}, {$pull: {RegisteredEvents : {_id:eventid}}});
+  const updateInfo = await userCollection.updateOne({emailId:emailId}, {$pull: {RegisteredEvents : {_id:eventId}}});
 
 
   if (updateInfo.modifiedCount === 0){
@@ -150,11 +133,11 @@ const unregisterForEvent = async (eventId,emailId) => {
     throw "Error: could not be updated";
   }
 
-
   return {update: true};
 
-
 };
+
+
 
 
   const postMessage = async (from,to,description) => {
@@ -225,7 +208,7 @@ const unregisterForEvent = async (eventId,emailId) => {
   };
 
 
-  const submitReview = async (from,title,description,eventId,rId) => {
+  const submitReview = async (from,title,description,eventId,reviewId) => {
       
     title = title.trim();
     from = from.trim();
@@ -252,9 +235,8 @@ const unregisterForEvent = async (eventId,emailId) => {
       throw "Invalid Email";
     }
     const reviewCollection = await reviews();
-    //const insertInfo;
-    if(rId){
-      insertInfo = await reviewCollection.updateOne({"_id": new ObjectId(rId)}, {$set: {"title":title,"description":description}});
+    if(reviewId){
+      insertInfo = await reviewCollection.updateOne({"_id": new ObjectId(reviewId)}, {$set: {"title":title,"description":description}});
     } else {
       insertInfo = await reviewCollection.insertOne(subReview);
     }
