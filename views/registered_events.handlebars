@@ -64,26 +64,14 @@
         text-align: center;
     }
 </style>
-
-
-{{!-- <div>
-    <h2>Events and Workshops you have registered for:</h2>
-</div>
-{{#each events}}
-<div class="events">
-    {{this.name}}
-</div>
-<form method="POST" action="/unregister">
-    <input type="hidden" name="eventId" value={{this._id}}>
-    <input type="submit" id="unregister" value="Unregister">
-</form>
-{{/each}} --}}
-
 <div class="events-container">
     <h2>Events and Workshops you have registered for:</h2>
     {{#each events}}
     <div class="events">
-        {{this.name}}
+        {{this.name}}<br>
+        Date: {{this.date}}<br>
+        Time: {{this.time}}<br>
+        Venue: {{this.venue}}<br>
         <form method="POST" action="/unregister">
             <input type="hidden" name="eventId" value="{{this._id}}">
             <input type="submit" class="unregister-button" value="Unregister">

@@ -109,10 +109,10 @@ router.route('/create-event')
             return res.status(400).send('Bad Request: No file uploaded');
          }
 
-         let eventPicture = req.file; // Access the uploaded file
+         let eventPicture = req.file; 
 
          await index.events.createEvent(name, email, date, time, venue, host, description, price, eventPicture);
-         res.redirect('/create-event');
+         res.redirect('/hostedevents');
       } catch (e) {
          console.error(e);
          res.status(500).send('Internal Server Error');

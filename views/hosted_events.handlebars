@@ -5,6 +5,14 @@
         margin: 0;
         padding: 0;
     }
+
+    h2 {
+        text-align: center;
+        color: #333;
+        padding-top: 30px;
+        margin-bottom: 20px;
+
+    }
     .events-container {
         width: 60%;
         margin: 0 auto;
@@ -23,7 +31,7 @@
     .events:nth-of-type(even) {
         background-color: #90ee90;
     }
-       #unregister {
+    .unregister-button {
         background-color: #116638;
         color: white;
         padding: 10px 20px;
@@ -31,29 +39,54 @@
         border: none;
         cursor: pointer;
         font-size: 1.2em;
+        display: block;
+        margin: 0 auto; /* This will center the button horizontally */
+        text-align: center;
+        
     }
-    #unregister:hover {
+    .unregister-button:hover {
         opacity: 0.8;
     }
-    #unregister {
-      background-color: #116638;
-      padding: 5px;
-      color: white;
-      margin-top: 20px;
+    
+  .events-container {
+        width: 60%;
+        margin: 0 auto;
+        padding-bottom: 20px;
+
     }
-  
+
+    .hosted-event-button{
+       background-color: #116638;
+        color: white;
+        padding: 10px 20px;
+        margin-top: 20px;
+        border: none;
+        cursor: pointer;
+        font-size: 1.2em;
+        display: block;
+        margin: 0 auto; /* This will center the button horizontally */
+        text-align: center; 
+    }
+
+    .hosted-event-button:hover{
+        opacity: 0.8;
+    }
+
 </style>
 
 <body>
-<div>
+<h2>
     Events and Workshops you are hosting:
-</div>
+</h2>
+<div class="events-container">
  {{#each events}}
-        <div class="events"> Workshop : {{this.name }} <br /> Date : {{this.date}} <br /></a></div>
+        <div class="events"> Workshop : {{this.name }} <br /> Date : {{this.date}} <br /></a>
+        <input type="submit" id="removepost" class="unregister-button" value="Cancel Event"></div>
         <form method="POST" action="/removepost">
     <input type="hidden" name="eventId" value={{this._id}}>
-    <input type="submit" id="removepost" value="Cancel Event">
+    
 </form>
+<br><br>
     {{/each}}
         <div class="event-request">
             <form action="/create-event">
@@ -61,4 +94,5 @@
             </form>
         </div>
     </div>
+</div>
 </body>
